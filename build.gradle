@@ -1,0 +1,42 @@
+plugins {
+    id "com.gradle.plugin-publish" version "0.11.0"
+    id 'java-gradle-plugin'
+    id 'maven-publish'
+}
+
+group 'com.chesapeaketechnology'
+version '0.0.1-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation gradleApi()
+}
+
+pluginBundle {
+    website = 'http://ctic-inc.com'
+    vcsUrl = 'https://github.com/chesapeaketechnology/gradle-garmin'
+    description = 'Allows Garmin Applications and Barrels to be built with Gradle'
+    tags = ['gradle', 'plugin', 'garmin', 'monkeyc', 'barrel', 'iq', 'connect-iq']
+}
+
+gradlePlugin {
+    plugins {
+        garminGradleAppPlugin {
+            id = 'com.chesapeaketechnology.gradle-garmin-app'
+            displayName = 'Gradle Garmin App Plugin'
+            description = 'Plugin which assists in building Garmin apps on Gradle'
+            implementationClass = 'com.chesapeaketechnology.gradle.plugins.garmin.GradleGarminAppPlugin'
+        }
+        garminGradleBarrelPlugin {
+            id = 'com.chesapeaketechnology.gradle-garmin-barrel'
+            displayName = 'Gradle Garmin Barrel Plugin'
+            description = 'Plugin which assists in building Garmin barrels on Gradle'
+            implementationClass = 'com.chesapeaketechnology.gradle.plugins.garmin.GradleGarminBarrelPlugin'
+        }
+    }
+}
