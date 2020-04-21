@@ -38,7 +38,7 @@ public class GradleGarminAppPlugin extends BaseGarminPlugin
         project.afterEvaluate(proj -> {
             BuildGarminAppTask defaultGarminTask = (BuildGarminAppTask) createDefaultGarminTask(proj, appExtension,
                     BUILD_GARMIN_APP, BuildGarminAppTask.class);
-            defaultGarminTask.setDevice(appExtension.getTargetDevices());
+            defaultGarminTask.setDevices(appExtension.getTargetDevices());
             
             if (appExtension.getDeveloperKey() != null)
             {
