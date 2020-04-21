@@ -19,6 +19,7 @@ import java.util.List;
 public abstract class BaseGarminTask extends DefaultTask
 {
     @InputDirectory
+    @Optional
     private File appDirectory;
 
     @OutputDirectory
