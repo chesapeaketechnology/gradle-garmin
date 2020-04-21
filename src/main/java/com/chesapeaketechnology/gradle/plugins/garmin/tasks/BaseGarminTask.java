@@ -35,6 +35,8 @@ public abstract class BaseGarminTask extends DefaultTask
     @Input
     protected String outName;
 
+    protected static final String SEPARATOR = System.getProperty("file.separator");
+
     @TaskAction
     void start()
     {
@@ -72,7 +74,7 @@ public abstract class BaseGarminTask extends DefaultTask
 
     protected File createChildOutputDirectory(File parentDir, String childDirName, ByteArrayOutputStream os)
     {
-        File childDir = new File(parentDir.getPath() + "/" + childDirName);
+        File childDir = new File(parentDir.getPath() + SEPARATOR + childDirName);
 
         if (!childDir.exists())
         {

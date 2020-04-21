@@ -15,8 +15,7 @@ import java.util.List;
  */
 public class BuildGarminBarrelTask extends BaseGarminTask
 {
-
-    private final String BARREL_BUILD = "/bin/barrelbuild";
+    private final String BARREL_BUILD = SEPARATOR + "bin" + SEPARATOR + "barrelbuild";
 
     @Override
     protected String getBinaryDirectoryName()
@@ -29,7 +28,7 @@ public class BuildGarminBarrelTask extends BaseGarminTask
     {
         List<String> args = createDefaultArgs();
         args.add("--output");
-        args.add(binaryDir + "/" + outName + ".barrel");
+        args.add(binaryDir + SEPARATOR + outName + ".barrel");
         execTask(sdkDirectory + BARREL_BUILD, args, byteArrayOutputStream);
     }
 }

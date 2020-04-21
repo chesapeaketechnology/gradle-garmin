@@ -26,7 +26,7 @@ public class BuildGarminAppTask extends BaseGarminTask
     @Input
     protected File developerKey;
 
-    private static final String APP_BUILD = "/bin/monkeyc";
+    private static final String APP_BUILD = SEPARATOR + "bin" + SEPARATOR + "monkeyc";
 
     @Override
     protected String getBinaryDirectoryName()
@@ -55,7 +55,7 @@ public class BuildGarminAppTask extends BaseGarminTask
             args.add("--device");
             args.add(device);
             args.add("--output");
-            args.add(deviceDirectory + "/" + outName + "-" + device + ".prg");
+            args.add(deviceDirectory + SEPARATOR + outName + "-" + device + ".prg");
 
             execTask(sdkDirectory + APP_BUILD, args, byteArrayOutputStream);
         });
