@@ -10,8 +10,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+/**
+ * Base Garmin task that invokes platform build tools from Garmin to produce wearable libraries and applications.
+ */
 public abstract class BaseGarminTask extends DefaultTask
 {
     @InputDirectory
@@ -32,8 +36,6 @@ public abstract class BaseGarminTask extends DefaultTask
     @TaskAction
     void start()
     {
-        //make sure data is valid
-        checkUserData();
 
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -41,7 +43,7 @@ public abstract class BaseGarminTask extends DefaultTask
         File binaryDir = createChildOutputDirectory(outputDirectory, getBinaryDirectoryName(), byteArrayOutputStream);
         if (binaryDir == null)
         {
-            System.out.println(byteArrayOutputStream.toString());
+            getLogger().error("Failed creating binary directory: {}", byteArrayOutputStream);
             //Something happened creating the binary directory; return
             byteArrayOutputStream.reset();
             return;
@@ -62,7 +64,7 @@ public abstract class BaseGarminTask extends DefaultTask
             execSpec.setStandardOutput(os);
         });
 
-        System.out.println(os.toString());
+        getLogger().info("Results of executing GarminTask {}", os);
         os.reset();
     }
 
@@ -80,18 +82,13 @@ public abstract class BaseGarminTask extends DefaultTask
                     return null;
                 } catch (IOException e)
                 {
-                    e.printStackTrace();
+                    getLogger().error("Unable to create child dir: {}", e);
                     return null;
                 }
             }
         }
 
         return childDir;
-    }
-
-    protected void checkUserData()
-    {
-
     }
 
     protected List<String> createDefaultArgs()
@@ -128,12 +125,12 @@ public abstract class BaseGarminTask extends DefaultTask
 
     public List<File> getJungleFiles()
     {
-        return jungleFiles;
+        return Collections.unmodifiableList(jungleFiles);
     }
 
     public void setJungleFiles(List<File> jungleFiles)
     {
-        this.jungleFiles = jungleFiles;
+        this.jungleFiles = Collections.unmodifiableList(jungleFiles);
     }
 
     public String getAppName()
@@ -143,7 +140,7 @@ public abstract class BaseGarminTask extends DefaultTask
 
     public void setAppName(String appName)
     {
-        this.outName = appName;
+        outName = appName;
     }
 
     public String getOutName()

@@ -1,7 +1,11 @@
 package com.chesapeaketechnology.gradle.plugins.garmin.extensions;
 
+import java.util.Collections;
 import java.util.List;
 
+/**
+ * Gradle extension for Garmin wearable applications and libraries, with common inputs and outputs for build script use.
+ */
 public class GarminExtension
 {
     private String sdkDirectory;
@@ -26,12 +30,12 @@ public class GarminExtension
 
     public List<String> getJungleFiles()
     {
-        return jungleFiles;
+        return Collections.unmodifiableList(jungleFiles);
     }
 
     public void setJungleFiles(List<String> jungleFiles)
     {
-        this.jungleFiles = jungleFiles;
+        this.jungleFiles = Collections.unmodifiableList(jungleFiles);
     }
 
     public String getAppDirectory()

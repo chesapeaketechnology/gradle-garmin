@@ -6,6 +6,13 @@ import org.gradle.api.Project;
 
 import java.io.File;
 
+/**
+ * Plugin to execute the specifics of building Garmin wearable applications.
+ * <p>
+ * The {@link GarminAppExtension extension} provides a number of basics for configuring the wearable application for building.
+ *
+ * @see BaseGarminPlugin
+ */
 public class GradleGarminAppPlugin extends BaseGarminPlugin
 {
     private static final String GARMIN_APP_EXT = "garminApp";
@@ -21,7 +28,7 @@ public class GradleGarminAppPlugin extends BaseGarminPlugin
         project.afterEvaluate(proj -> {
             BuildGarminAppTask defaultGarminTask = (BuildGarminAppTask) createDefaultGarminTask(proj, appExtension,
                     BUILD_GARMIN_APP, BuildGarminAppTask.class);
-            defaultGarminTask.setDevice(appExtension.getTargetDevices());
+            defaultGarminTask.setDevices(appExtension.getTargetDevices());
             defaultGarminTask.setDeveloperKey(new File(appExtension.getDeveloperKey()));
             defaultGarminTask.setParallel(appExtension.isParallelBuild());
         });

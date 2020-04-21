@@ -10,6 +10,9 @@ import java.io.File;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+/**
+ * Base plugin to execute the specifics of building Garmin wearable software with platform specific tooling.
+ */
 abstract class BaseGarminPlugin implements Plugin<Project>
 {
     @Override
