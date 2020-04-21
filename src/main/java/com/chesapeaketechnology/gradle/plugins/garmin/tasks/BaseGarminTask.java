@@ -37,6 +37,8 @@ public abstract class BaseGarminTask extends DefaultTask
 
     protected static final String SEPARATOR = System.getProperty("file.separator");
 
+    protected static final boolean isWindows = System.getProperty("os.name").contains("Windows") ;
+
     @TaskAction
     void start()
     {

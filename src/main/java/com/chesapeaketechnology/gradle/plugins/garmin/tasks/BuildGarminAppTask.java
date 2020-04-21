@@ -26,7 +26,7 @@ public class BuildGarminAppTask extends BaseGarminTask
     @Input
     protected File developerKey;
 
-    private static final String APP_BUILD = SEPARATOR + "bin" + SEPARATOR + "monkeyc";
+    private static final String APP_BUILD = SEPARATOR + "bin" + SEPARATOR + "monkeyc" + (isWindows ? ".bat" : "");
 
     @Override
     protected String getBinaryDirectoryName()

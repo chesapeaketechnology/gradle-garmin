@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class BuildGarminBarrelTask extends BaseGarminTask
 {
-    private final String BARREL_BUILD = SEPARATOR + "bin" + SEPARATOR + "barrelbuild";
+    private final String BARREL_BUILD = SEPARATOR + "bin" + SEPARATOR + "barrelbuild" + (isWindows ? ".bat" : "");
 
     @Override
     protected String getBinaryDirectoryName()
