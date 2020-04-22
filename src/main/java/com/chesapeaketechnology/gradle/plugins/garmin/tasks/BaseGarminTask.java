@@ -62,6 +62,8 @@ public abstract class BaseGarminTask extends DefaultTask
 
     protected abstract void runBuild(File binaryDir, ByteArrayOutputStream byteArrayOutputStream);
 
+    public abstract List<File> getGeneratedArtifacts();
+
     protected void execTask(String execPath, List<String> args, ByteArrayOutputStream os)
     {
         getProject().exec(execSpec -> {

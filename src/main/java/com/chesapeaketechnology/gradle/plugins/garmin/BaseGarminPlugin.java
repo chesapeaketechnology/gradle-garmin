@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 abstract class BaseGarminPlugin implements Plugin<Project>
 {
     private final String GARMIN_SDK_HOME = "GARMIN_SDK_HOME";
+    private final String GARMIN_GROUP = "garmin";
+    public static final String BUILD_GARMIN = "buildGarmin";
 
     @Override
     public void apply(Project project)
@@ -52,7 +54,7 @@ abstract class BaseGarminPlugin implements Plugin<Project>
 
         BaseGarminTask buildGarminTask = project.getTasks().create(taskName, taskClazz);
         buildGarminTask.setJungleFiles(extension.getJungleFiles().stream().map(File::new).collect(Collectors.toList()));
-
+        buildGarminTask.setGroup(GARMIN_GROUP);
         if (extension.getSdkDirectory() != null)
         {
             buildGarminTask.setSdkDirectory(new File(extension.getSdkDirectory()));

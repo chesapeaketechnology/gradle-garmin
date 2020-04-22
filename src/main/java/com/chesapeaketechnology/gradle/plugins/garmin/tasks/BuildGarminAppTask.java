@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -59,6 +60,21 @@ public class BuildGarminAppTask extends BaseGarminTask
 
             execTask(sdkDirectory + APP_BUILD, args, byteArrayOutputStream);
         });
+    }
+
+    @Override
+    public List<File> getGeneratedArtifacts()
+    {
+        final String binaryDirectoryPath = getOutputDirectory() + SEPARATOR + getBinaryDirectoryName() + SEPARATOR;
+
+        return devices.stream()
+                .map(deviceStr -> {
+                    final String deviceDirectory = deviceStr + SEPARATOR;
+                    final String PRGFileName = outName + "-" + deviceStr + ".prg";
+                    return new File(binaryDirectoryPath + deviceDirectory + PRGFileName);
+                })
+                .filter(File::exists)
+                .collect(Collectors.toList());
     }
 
     public boolean isParallel()
