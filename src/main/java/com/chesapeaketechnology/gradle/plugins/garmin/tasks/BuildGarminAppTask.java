@@ -96,7 +96,7 @@ public class BuildGarminAppTask extends BaseGarminTask
                                     StandardCopyOption.REPLACE_EXISTING);
                         } catch (IOException e)
                         {
-                            e.printStackTrace();
+                            getLogger().error("Unable to copy barrel dependency to the dependency directory!", e);
                         }
                     }
             );
@@ -118,7 +118,7 @@ public class BuildGarminAppTask extends BaseGarminTask
             properties.load(input);
         } catch (IOException ex)
         {
-            ex.printStackTrace();
+            getLogger().error("An error has occurred when attempting to read the default jungle file!", ex);
         }
 
         try (OutputStream outputStream = new FileOutputStream(DEFAULT_JUNGLE_FILE))
@@ -140,7 +140,7 @@ public class BuildGarminAppTask extends BaseGarminTask
             properties.store(outputStream, null);
         } catch (IOException e)
         {
-            e.printStackTrace();
+            getLogger().error("An error has occurred when attempting to write to the default jungle file!", e);
         }
     }
 

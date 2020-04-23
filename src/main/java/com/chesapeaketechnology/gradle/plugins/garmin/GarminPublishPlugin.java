@@ -12,6 +12,10 @@ import org.gradle.api.publish.maven.plugins.MavenPublishPlugin;
 import java.io.File;
 import java.util.Optional;
 
+/**
+ * Gradle plugin which handles creating Garmin configurations and publishing artifacts (barrels/apps)
+ * to local and remote repositories.
+ */
 public class GarminPublishPlugin implements Plugin<Project>
 {
     @Override
@@ -55,7 +59,6 @@ public class GarminPublishPlugin implements Plugin<Project>
                                                 mavenArtifact.setExtension(getExtensionByStringHandling(file.getName()).orElse(""));
                                                 if (hasAppPlugin)
                                                 {
-                                                    //find the device name to set the classifier
                                                     mavenArtifact.setClassifier(name);
                                                 }
                                             }))

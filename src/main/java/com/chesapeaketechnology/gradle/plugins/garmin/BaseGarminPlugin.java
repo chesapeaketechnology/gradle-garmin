@@ -19,7 +19,6 @@ abstract class BaseGarminPlugin implements Plugin<Project>
 {
     private final String GARMIN_SDK_HOME = "GARMIN_SDK_HOME";
     private final String GARMIN_GROUP = "garmin";
-    public static final String BUILD_GARMIN = "buildGarmin";
 
     @Override
     public void apply(Project project)
