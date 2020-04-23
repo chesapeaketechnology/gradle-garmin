@@ -4,6 +4,13 @@ import com.chesapeaketechnology.gradle.plugins.garmin.extensions.GarminBarrelExt
 import com.chesapeaketechnology.gradle.plugins.garmin.tasks.BuildGarminBarrelTask;
 import org.gradle.api.Project;
 
+/**
+ * Plugin to execute the specifics of building Garmin wearable libraries (barrels).
+ * <p>
+ * The {@link GarminBarrelExtension extension} provides a number of basics for configuring the wearable application for building.
+ *
+ * @see BaseGarminPlugin
+ */
 public class GradleGarminBarrelPlugin extends BaseGarminPlugin
 {
     private static final String GARMIN_BARREL_EXT = "garminBarrel";

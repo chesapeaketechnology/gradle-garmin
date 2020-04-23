@@ -4,9 +4,17 @@ import org.gradle.api.tasks.Input;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * Task that invokes platform build tools from Garmin to produce wearable applications.
+ * <p>
+ * The {@link BaseGarminTask task} invokes Garmin wearable build tools.
+ *
+ * @see BaseGarminTask
+ */
 public class BuildGarminAppTask extends BaseGarminTask
 {
     @Input
@@ -18,7 +26,7 @@ public class BuildGarminAppTask extends BaseGarminTask
     @Input
     protected File developerKey;
 
-    private final String APP_BUILD = "/bin/monkeyc";
+    private static final String APP_BUILD = SEPARATOR + "bin" + SEPARATOR + "monkeyc" + (isWindows ? ".bat" : "");
 
     @Override
     protected String getBinaryDirectoryName()
@@ -29,15 +37,14 @@ public class BuildGarminAppTask extends BaseGarminTask
     @Override
     protected void runBuild(File binaryDir, ByteArrayOutputStream byteArrayOutputStream)
     {
-        Stream<String> devicesStream = parallel ? this.devices.parallelStream() : this.devices.stream();
+        Stream<String> devicesStream = parallel ? devices.parallelStream() : devices.stream();
 
         devicesStream.forEach(device -> {
             File deviceDirectory = createChildOutputDirectory(binaryDir, device, byteArrayOutputStream);
 
             if (deviceDirectory == null)
             {
-                System.out.println(byteArrayOutputStream.toString());
-                //Something happened creating the device directory; skip this device
+                getLogger().error("Error while creating the device directory, skipping this device: {}", byteArrayOutputStream);
                 byteArrayOutputStream.reset();
                 return;
             }
@@ -48,7 +55,7 @@ public class BuildGarminAppTask extends BaseGarminTask
             args.add("--device");
             args.add(device);
             args.add("--output");
-            args.add(deviceDirectory + "/" + outName + "-" + device + ".prg");
+            args.add(deviceDirectory + SEPARATOR + outName + "-" + device + ".prg");
 
             execTask(sdkDirectory + APP_BUILD, args, byteArrayOutputStream);
         });
@@ -66,12 +73,12 @@ public class BuildGarminAppTask extends BaseGarminTask
 
     public List<String> getDevices()
     {
-        return devices;
+        return Collections.unmodifiableList(devices);
     }
 
-    public void setDevice(List<String> devices)
+    public void setDevices(List<String> devices)
     {
-        this.devices = devices;
+        this.devices = Collections.unmodifiableList(devices);
     }
 
     public File getDeveloperKey()

@@ -1,7 +1,11 @@
 package com.chesapeaketechnology.gradle.plugins.garmin.extensions;
 
+import java.util.Collections;
 import java.util.List;
 
+/**
+ * Gradle extension for Garmin wearable applications.
+ */
 public class GarminAppExtension extends GarminExtension
 {
     private List<String> targetDevices;
@@ -12,12 +16,12 @@ public class GarminAppExtension extends GarminExtension
 
     public List<String> getTargetDevices()
     {
-        return targetDevices;
+        return Collections.unmodifiableList(targetDevices);
     }
 
     public void setTargetDevices(List<String> targetDevices)
     {
-        this.targetDevices = targetDevices;
+        this.targetDevices = Collections.unmodifiableList(targetDevices);
     }
 
     public boolean isParallelBuild()
@@ -37,6 +41,6 @@ public class GarminAppExtension extends GarminExtension
 
     public void setDeveloperKey(String developerKeyLocation)
     {
-        this.developerKey = developerKeyLocation;
+        developerKey = developerKeyLocation;
     }
 }

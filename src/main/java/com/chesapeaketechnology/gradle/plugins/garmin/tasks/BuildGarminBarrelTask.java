@@ -1,12 +1,21 @@
 package com.chesapeaketechnology.gradle.plugins.garmin.tasks;
 
+import org.gradle.api.tasks.Input;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
 
+/**
+ * Task that invokes platform build tools from Garmin to produce libraries (barrels).
+ * <p>
+ * The {@link BaseGarminTask task} invokes Garmin wearable build tools.
+ *
+ * @see BaseGarminTask
+ */
 public class BuildGarminBarrelTask extends BaseGarminTask
 {
-    private final String BARREL_BUILD = "/bin/barrelbuild";
+    private final String BARREL_BUILD = SEPARATOR + "bin" + SEPARATOR + "barrelbuild" + (isWindows ? ".bat" : "");
 
     @Override
     protected String getBinaryDirectoryName()
@@ -19,7 +28,7 @@ public class BuildGarminBarrelTask extends BaseGarminTask
     {
         List<String> args = createDefaultArgs();
         args.add("--output");
-        args.add(binaryDir + "/" + outName + ".barrel");
+        args.add(binaryDir + SEPARATOR + outName + ".barrel");
         execTask(sdkDirectory + BARREL_BUILD, args, byteArrayOutputStream);
     }
 }

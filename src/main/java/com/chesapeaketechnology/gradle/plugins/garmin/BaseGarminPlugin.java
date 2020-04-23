@@ -12,6 +12,9 @@ import java.io.File;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+/**
+ * Base plugin to execute the specifics of building Garmin wearable software with platform specific tooling.
+ */
 abstract class BaseGarminPlugin implements Plugin<Project>
 {
     private final String GARMIN_SDK_HOME = "GARMIN_SDK_HOME";
@@ -25,7 +28,6 @@ abstract class BaseGarminPlugin implements Plugin<Project>
     protected GarminExtension createDefaultGarminExtension(Project project, String extension, Class<? extends GarminExtension> extensionClazz)
     {
         GarminExtension garminExtension = project.getExtensions().create(extension, extensionClazz);
-        garminExtension.setAppDirectory(project.getProjectDir().toString());
         garminExtension.setJungleFiles(Collections.singletonList("monkey.jungle"));
         garminExtension.setAppName(project.getName());
         garminExtension.setOutputDirectory(project.getBuildDir().getPath());
@@ -49,7 +51,6 @@ abstract class BaseGarminPlugin implements Plugin<Project>
         }
 
         BaseGarminTask buildGarminTask = project.getTasks().create(taskName, taskClazz);
-        buildGarminTask.setAppDirectory(new File(extension.getAppDirectory()));
         buildGarminTask.setJungleFiles(extension.getJungleFiles().stream().map(File::new).collect(Collectors.toList()));
 
         if (extension.getSdkDirectory() != null)

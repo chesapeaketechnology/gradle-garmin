@@ -7,14 +7,14 @@ Gradle plugins to assist with Garmin wearable development
 **Apps**
 ```groovy
 plugins {
-  id "com.chesapeaketechnology.gradle-garmin-app" version "0.0.1-SNAPSHOT"
+  id "com.chesapeaketechnology.gradle-garmin-app" version "0.1.0"
 }
 ```
 **Barrels**
 
 ```groovy
 plugins {
-  id "com.chesapeaketechnology.gradle-garmin-barrel" version "0.0.1-SNAPSHOT"
+  id "com.chesapeaketechnology.gradle-garmin-barrel" version "0.1.0"
 }
 ```
 
@@ -28,7 +28,7 @@ buildscript {
     dependencies {
         classpath group: 'com.chesapeaketechnology',
                 name: 'gradle-garmin',
-                version: '0.0.1-SNAPSHOT'
+                version: '0.1.0'
     }
 }
 ```
@@ -56,20 +56,25 @@ for signing your Garmin applications can be found in the Garmin [Getting Started
 ### Configuration
 Both Apps and Barrels share some of the same configuration items.
 
-* `sdkDirectory` - (REQUIRED if `GARMIN_SDK_HOME` is not set) Location of the Garmin SDK install
-* `appDirectory` - (OPTIONAL) (DEFAULT: `<Project Directory>`) base directory for the app/barrel
-* `outputDirectory` - (OPTIONAL) (DEFAULT: `<Java Build Directory>`) directory for generated output
-* `jungleFiles` - (OPTIONAL) (DEFAULT: `<Project Directory>/monkey.jungle`) array of jungle files to compile with
-* `outName` - (OPTIONAL) (DEFAULT: `<Project Name>`) the generated file name(s)
+| Property      | Description  | Required      | Default  |
+| ------------- | ------------- | ------------- | ------------ |
+| `sdkDirectory`  | Location of the Garmin SDK install   | **Yes** - if GARMIN_SDK_HOME is not set | N/A
+| `appDirectory`  | Base directory for the app/barrel      |   **No** | `<Project Directory>`
+| `outputDirectory` | Directory for generated output     |    **No** | `<Java Build Directory>`
+| `jungleFiles` | Array of jungle files to compile with    |    **No** | `<Project Directory>/monkey.jungle`
+| `outName` | The generated file name(s)     |    **No** | `<Project Name>`
+
 
 #### Garmin Apps
 
 For the Garmin App plugin, use the `garminApp` extension. In addition to the shared configuration items listed above, 
 the following configuration options are available:
 
-* `developerKey` - (REQUIRED if `GARMIN_DEV_KEY` is not set) The developer key used to compile the binaries
-* `devices` - (REQUIRED) List of devices to produce binaries
-* `parallel` - (OPTIONAL) (DEFAULT: `true`) Whether or not to compile all devices in parallel
+| Property      | Description  | Required      | Default  |
+| ------------- | ------------- | ------------- | ------------ |
+| `developerKey`  | The developer key used to compile the binaries  | **Yes** - if `GARMIN_DEV_KEY` is not set | N/A
+| `devices`  | List of devices to produce binaries      |   **Yes** | N/A
+| `parallel` | Whether or not to compile all devices in parallel     |    **No** | `true`
 
 Example:
 ```groovy
