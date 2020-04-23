@@ -1,11 +1,7 @@
 package com.chesapeaketechnology.gradle.plugins.garmin.tasks;
 
 import org.gradle.api.DefaultTask;
-import org.gradle.api.tasks.Input;
-import org.gradle.api.tasks.InputDirectory;
-import org.gradle.api.tasks.Optional;
-import org.gradle.api.tasks.OutputDirectory;
-import org.gradle.api.tasks.TaskAction;
+import org.gradle.api.tasks.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -37,12 +33,11 @@ public abstract class BaseGarminTask extends DefaultTask
 
     protected static final String SEPARATOR = System.getProperty("file.separator");
 
-    protected static final boolean isWindows = System.getProperty("os.name").contains("Windows") ;
+    protected static final boolean isWindows = System.getProperty("os.name").contains("Windows");
 
     @TaskAction
     void start()
     {
-
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
         //create the root directory that the binary files will live under
@@ -103,8 +98,10 @@ public abstract class BaseGarminTask extends DefaultTask
     {
         List<String> args = new ArrayList<>();
 
-        args.add("-f");
-        jungleFiles.forEach(file -> args.add(file.getPath()));
+        jungleFiles.forEach(file -> {
+            args.add("-f");
+            args.add(file.getPath());
+        });
 
         args.add("--warn");
 
@@ -138,7 +135,7 @@ public abstract class BaseGarminTask extends DefaultTask
 
     public void setJungleFiles(List<File> jungleFiles)
     {
-        this.jungleFiles = Collections.unmodifiableList(jungleFiles);
+        this.jungleFiles = jungleFiles;
     }
 
     public String getAppName()

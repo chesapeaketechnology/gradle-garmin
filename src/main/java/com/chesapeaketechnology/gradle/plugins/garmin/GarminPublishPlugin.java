@@ -19,6 +19,8 @@ public class GarminPublishPlugin implements Plugin<Project>
     {
         project.getPlugins().apply(MavenPublishPlugin.class);
 
+        project.getConfigurations().maybeCreate("barrel");
+
         project.afterEvaluate(proj -> {
             boolean hasBarrelPlugin = proj.getPlugins().hasPlugin(GradleGarminBarrelPlugin.class);
             boolean hasAppPlugin = proj.getPlugins().hasPlugin(GradleGarminAppPlugin.class);
@@ -43,7 +45,7 @@ public class GarminPublishPlugin implements Plugin<Project>
             }
 
             proj.getExtensions().configure(PublishingExtension.class, publishing -> publishing.publications(publications -> {
-                baseGarminTask.getGeneratedArtifacts().forEach(file -> {
+                        baseGarminTask.getGeneratedArtifacts().forEach(file -> {
                             final String name = getNameFromFile(file, hasAppPlugin);
                             publications.create(
                                     name,
