@@ -42,11 +42,7 @@ public class GarminPublishPlugin implements Plugin<Project>
                 throw new GradleException("Unable to find Garmin build task.");
             }
 
-            Task publishToMavenLocal = project.getTasks().findByPath("publishToMavenLocal");
-            if (publishToMavenLocal != null)
-            {
-                publishToMavenLocal.dependsOn(baseGarminTask);
-            }
+            setPublishingDependsOn(project, baseGarminTask);
 
             proj.getExtensions().configure(PublishingExtension.class, publishing -> publishing.publications(publications -> {
                         baseGarminTask.getGeneratedArtifacts().forEach(file -> {
@@ -67,6 +63,20 @@ public class GarminPublishPlugin implements Plugin<Project>
                     }
             ));
         });
+    }
+
+    private void setPublishingDependsOn(Project project, BaseGarminTask task)
+    {
+        Task publishToMavenLocal = project.getTasks().findByPath("publishToMavenLocal");
+        if (publishToMavenLocal != null)
+        {
+            publishToMavenLocal.dependsOn(task);
+        }
+
+        Task publish = project.getTasks().findByPath("publish");
+        if(publish != null) {
+            publish.dependsOn(task);
+        }
     }
 
     private String getNameFromFile(File file, boolean isApp)
