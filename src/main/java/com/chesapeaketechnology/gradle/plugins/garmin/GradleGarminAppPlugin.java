@@ -23,6 +23,14 @@ public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppBuildE
     private static final String DEVELOPER_KEY_ENV = "GARMIN_DEV_KEY";
 
     @Override
+    public void apply(Project project)
+    {
+        super.apply(project);
+
+        project.getConfigurations().maybeCreate("barrel");
+    }
+
+    @Override
     protected GarminAppBuildExtension createExtension(Project project)
     {
         return createAppBuildExt(project);
@@ -31,7 +39,9 @@ public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppBuildE
     @Override
     protected List<BuildGarminAppTask> createTasks(Project project, GarminAppBuildExtension extension)
     {
-        return Collections.singletonList(createBuildTask(project, extension));
+        BuildGarminAppTask buildTask = createBuildTask(project, extension);
+        configurePublishing(project, buildTask);
+        return Collections.singletonList(buildTask);
     }
 
     private GarminAppBuildExtension createAppBuildExt(Project project)
@@ -67,5 +77,15 @@ public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppBuildE
 
         defaultGarminTask.setParallel(appExtension.isParallelBuild());
         return defaultGarminTask;
+    }
+
+    @Override
+    protected String getNameFromFile(File file)
+    {
+        String fileName = file.getName();
+        //example file name: app-fenix5plus.prg
+        final String[] split = fileName.split("-");//[app, fenix5plus.prg]
+        fileName = split[split.length - 1]; // fenix5plus.prg
+        return fileName.split("\\.")[0];
     }
 }
