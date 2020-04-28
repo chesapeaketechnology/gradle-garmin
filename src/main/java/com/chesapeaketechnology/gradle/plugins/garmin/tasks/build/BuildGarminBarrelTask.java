@@ -1,6 +1,6 @@
-package com.chesapeaketechnology.gradle.plugins.garmin.tasks;
+package com.chesapeaketechnology.gradle.plugins.garmin.tasks.build;
 
-import org.gradle.api.tasks.Input;
+import com.chesapeaketechnology.gradle.plugins.garmin.tasks.BaseGarminTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @see BaseGarminTask
  */
-public class BuildGarminBarrelTask extends BaseGarminTask
+public class BuildGarminBarrelTask extends BaseGarminBuildTask
 {
     private final String BARREL_BUILD = SEPARATOR + "bin" + SEPARATOR + "barrelbuild" + (isWindows ? ".bat" : "");
 

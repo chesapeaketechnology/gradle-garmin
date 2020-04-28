@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Gradle extension for Garmin wearable applications.
  */
-public class GarminAppExtension extends GarminExtension
+public class GarminAppBuildExtension extends GarminBuildExtension
 {
     private List<String> targetDevices;
 

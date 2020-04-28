@@ -6,27 +6,13 @@ import java.util.List;
 /**
  * Gradle extension for Garmin wearable applications and libraries, with common inputs and outputs for build script use.
  */
-public class GarminExtension
+public class GarminBuildExtension extends BaseGarminExtension
 {
-    private String sdkDirectory;
-
-    private String appDirectory;
-
     private List<String> jungleFiles;
 
     private String appName;
 
     private String outputDirectory;
-
-    public String getSdkDirectory()
-    {
-        return sdkDirectory;
-    }
-
-    public void setSdkDirectory(String sdkDirectory)
-    {
-        this.sdkDirectory = sdkDirectory;
-    }
 
     public List<String> getJungleFiles()
     {
@@ -36,16 +22,6 @@ public class GarminExtension
     public void setJungleFiles(List<String> jungleFiles)
     {
         this.jungleFiles = Collections.unmodifiableList(jungleFiles);
-    }
-
-    public String getAppDirectory()
-    {
-        return appDirectory;
-    }
-
-    public void setAppDirectory(String appDirectory)
-    {
-        this.appDirectory = appDirectory;
     }
 
     public String getAppName()

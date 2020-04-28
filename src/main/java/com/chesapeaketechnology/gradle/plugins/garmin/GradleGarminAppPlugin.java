@@ -1,7 +1,7 @@
 package com.chesapeaketechnology.gradle.plugins.garmin;
 
-import com.chesapeaketechnology.gradle.plugins.garmin.extensions.GarminAppExtension;
-import com.chesapeaketechnology.gradle.plugins.garmin.tasks.BuildGarminAppTask;
+import com.chesapeaketechnology.gradle.plugins.garmin.extensions.GarminAppBuildExtension;
+import com.chesapeaketechnology.gradle.plugins.garmin.tasks.build.BuildGarminAppTask;
 import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.Project;
 
@@ -10,11 +10,11 @@ import java.io.File;
 /**
  * Plugin to execute the specifics of building Garmin wearable applications.
  * <p>
- * The {@link GarminAppExtension extension} provides a number of basics for configuring the wearable application for building.
+ * The {@link GarminAppBuildExtension extension} provides a number of basics for configuring the wearable application for building.
  *
- * @see BaseGarminPlugin
+ * @see BaseGarminBuildPlugin
  */
-public class GradleGarminAppPlugin extends BaseGarminPlugin
+public class GradleGarminAppPlugin extends BaseGarminBuildPlugin
 {
     private static final String GARMIN_APP_EXT = "garminApp";
     private static final String BUILD_GARMIN_APP = "buildGarminApp";
@@ -25,8 +25,17 @@ public class GradleGarminAppPlugin extends BaseGarminPlugin
     public void apply(Project project)
     {
         super.apply(project);
-        GarminAppExtension appExtension = (GarminAppExtension) createDefaultGarminExtension(project, GARMIN_APP_EXT,
-                GarminAppExtension.class);
+        GarminAppBuildExtension appBuildExt = createAppBuildExt(project);
+        project.afterEvaluate(proj -> {
+            createBuildTask(proj, appBuildExt);
+            createRunTask(proj, appBuildExt);
+        });
+    }
+
+    private GarminAppBuildExtension createAppBuildExt(Project project)
+    {
+        GarminAppBuildExtension appExtension = (GarminAppBuildExtension) createDefaultGarminBuildExtension(project, GARMIN_APP_EXT,
+                GarminAppBuildExtension.class);
         appExtension.setParallelBuild(true);
 
         String devKey = System.getenv(DEVELOPER_KEY_ENV);
@@ -35,22 +44,26 @@ public class GradleGarminAppPlugin extends BaseGarminPlugin
             appExtension.setDeveloperKey(devKey);
         }
 
-        project.afterEvaluate(proj -> {
-            BuildGarminAppTask defaultGarminTask = (BuildGarminAppTask) createDefaultGarminTask(proj, appExtension,
-                    BUILD_GARMIN_APP, BuildGarminAppTask.class);
-            defaultGarminTask.setDevices(appExtension.getTargetDevices());
-            
-            if (appExtension.getDeveloperKey() != null)
-            {
-                defaultGarminTask.setDeveloperKey(new File(appExtension.getDeveloperKey()));
-            } else
-            {
-                throw new InvalidUserDataException("Developer key cannot be null! Please set the GARMIN_DEV_KEY " +
-                        "environment variable to the location of your Garmin developer key OR set 'developerKey' " +
-                        "in the garminApp config block.");
-            }
+        return appExtension;
+    }
 
-            defaultGarminTask.setParallel(appExtension.isParallelBuild());
-        });
+    private BuildGarminAppTask createBuildTask(Project proj, GarminAppBuildExtension appExtension)
+    {
+        BuildGarminAppTask defaultGarminTask = (BuildGarminAppTask) createDefaultGarminBuildTask(proj, appExtension,
+                BUILD_GARMIN_APP, BuildGarminAppTask.class);
+        defaultGarminTask.setDevices(appExtension.getTargetDevices());
+
+        if (appExtension.getDeveloperKey() != null)
+        {
+            defaultGarminTask.setDeveloperKey(new File(appExtension.getDeveloperKey()));
+        } else
+        {
+            throw new InvalidUserDataException("Developer key cannot be null! Please set the GARMIN_DEV_KEY " +
+                    "environment variable to the location of your Garmin developer key OR set 'developerKey' " +
+                    "in the garminApp config block.");
+        }
+
+        defaultGarminTask.setParallel(appExtension.isParallelBuild());
+        return defaultGarminTask;
     }
 }

@@ -1,5 +1,6 @@
-package com.chesapeaketechnology.gradle.plugins.garmin.tasks;
+package com.chesapeaketechnology.gradle.plugins.garmin.tasks.build;
 
+import com.chesapeaketechnology.gradle.plugins.garmin.tasks.BaseGarminTask;
 import org.gradle.api.tasks.Input;
 
 import java.io.ByteArrayOutputStream;
@@ -15,7 +16,7 @@ import java.util.stream.Stream;
  *
  * @see BaseGarminTask
  */
-public class BuildGarminAppTask extends BaseGarminTask
+public class BuildGarminAppTask extends BaseGarminBuildTask
 {
     @Input
     private List<String> devices;
