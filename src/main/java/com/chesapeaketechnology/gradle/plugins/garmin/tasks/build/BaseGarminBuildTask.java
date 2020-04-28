@@ -46,6 +46,8 @@ public abstract class BaseGarminBuildTask extends BaseGarminTask
 
     protected abstract void runBuild(File binaryDir, ByteArrayOutputStream byteArrayOutputStream);
 
+    public abstract List<File> getGeneratedArtifacts();
+
     protected File createChildOutputDirectory(File parentDir, String childDirName, ByteArrayOutputStream os)
     {
         File childDir = new File(parentDir.getPath() + SEPARATOR + childDirName);

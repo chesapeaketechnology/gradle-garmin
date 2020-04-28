@@ -1,6 +1,7 @@
 package com.chesapeaketechnology.gradle.plugins.garmin;
 
 import com.chesapeaketechnology.gradle.plugins.garmin.tasks.BaseGarminTask;
+import com.chesapeaketechnology.gradle.plugins.garmin.tasks.build.BaseGarminBuildTask;
 import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -34,7 +35,7 @@ public class GarminPublishPlugin implements Plugin<Project>
                 throw new GradleException("Unable to find any Garmin Gradle plugins.");
             }
 
-            final BaseGarminTask baseGarminTask = (BaseGarminTask) proj.getTasks().findByName(
+            final BaseGarminBuildTask baseGarminTask = (BaseGarminBuildTask) proj.getTasks().findByName(
                     hasAppPlugin ? GradleGarminAppPlugin.BUILD_GARMIN_APP : GradleGarminBarrelPlugin.BUILD_GARMIN_BARREL);
 
             if (baseGarminTask == null)

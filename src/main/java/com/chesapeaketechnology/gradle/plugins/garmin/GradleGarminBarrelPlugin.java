@@ -23,7 +23,10 @@ public class GradleGarminBarrelPlugin extends BaseGarminBuildPlugin
 
         GarminBarrelBuildExtension appExtension = (GarminBarrelBuildExtension) createDefaultGarminBuildExtension(project,
                 GARMIN_BARREL_EXT, GarminBarrelBuildExtension.class);
-        project.afterEvaluate(proj -> createDefaultGarminBuildTask(proj, appExtension, BUILD_GARMIN_BARREL,
-                BuildGarminBarrelTask.class));
+        project.afterEvaluate(proj -> {
+            createDefaultGarminBuildTask(proj, appExtension, BUILD_GARMIN_BARREL,
+                    BuildGarminBarrelTask.class);
+            createRunTask(proj, appExtension);
+        });
     }
 }
