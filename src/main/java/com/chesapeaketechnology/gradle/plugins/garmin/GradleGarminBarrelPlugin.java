@@ -14,7 +14,7 @@ import org.gradle.api.Project;
 public class GradleGarminBarrelPlugin extends BaseGarminBuildPlugin
 {
     private static final String GARMIN_BARREL_EXT = "garminBarrel";
-    private static final String BUILD_GARMIN_BARREL = "buildGarminBarrel";
+    public static final String BUILD_GARMIN_BARREL = "buildGarminBarrel";
 
     @Override
     public void apply(Project project)

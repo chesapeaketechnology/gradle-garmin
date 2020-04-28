@@ -17,7 +17,7 @@ import java.io.File;
 public class GradleGarminAppPlugin extends BaseGarminBuildPlugin
 {
     private static final String GARMIN_APP_EXT = "garminApp";
-    private static final String BUILD_GARMIN_APP = "buildGarminApp";
+    public static final String BUILD_GARMIN_APP = "buildGarminApp";
 
     private static final String DEVELOPER_KEY_ENV = "GARMIN_DEV_KEY";
 

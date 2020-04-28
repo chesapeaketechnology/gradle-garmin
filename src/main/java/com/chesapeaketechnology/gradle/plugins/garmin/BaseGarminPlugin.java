@@ -14,6 +14,7 @@ public class BaseGarminPlugin implements Plugin<Project>
 {
     private final String GARMIN_SDK_HOME = "GARMIN_SDK_HOME";
     protected static final String START_CONNECT_IQ_TASK = "connectIQ";
+    private final String GARMIN_GROUP = "garmin";
 
     @Override
     public void apply(Project project)
@@ -34,6 +35,7 @@ public class BaseGarminPlugin implements Plugin<Project>
                     "environment variable to the location of your Garmin installation OR set 'sdkDirectory' " +
                     "in the config block.");
         }
+        buildGarminTask.setGroup(GARMIN_GROUP);
 
         return buildGarminTask;
     }
