@@ -6,7 +6,6 @@ public class BaseGarminExtension
 
     private String appDirectory;
 
-
     public String getSdkDirectory()
     {
         return sdkDirectory;

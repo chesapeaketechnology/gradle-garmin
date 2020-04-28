@@ -1,4 +1,3 @@
-
 package com.chesapeaketechnology.gradle.plugins.garmin.tasks.run;
 
 import com.chesapeaketechnology.gradle.plugins.garmin.tasks.BaseGarminTask;
@@ -12,8 +11,8 @@ public class ConnectIQTask extends BaseGarminTask
     private final String CONNECTIQ_EXEC = "connectiq" + (isWindows ? ".bat" : "");
 
     @TaskAction
-    void start() {
+    void start()
+    {
         execTask(getBinDirectory() + CONNECTIQ_EXEC, Collections.emptyList(), new ByteArrayOutputStream());
     }
-
 }

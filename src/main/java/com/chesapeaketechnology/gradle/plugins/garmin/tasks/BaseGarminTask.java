@@ -4,14 +4,9 @@ import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.Optional;
-import org.gradle.api.tasks.OutputDirectory;
-import org.gradle.api.tasks.TaskAction;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -42,7 +37,8 @@ public abstract class BaseGarminTask extends DefaultTask
         os.reset();
     }
 
-    protected String getBinDirectory() {
+    protected String getBinDirectory()
+    {
         return sdkDirectory + SEPARATOR + "bin" + SEPARATOR;
     }
 

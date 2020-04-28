@@ -122,5 +122,4 @@ public abstract class BaseGarminBuildTask extends BaseGarminTask
     {
         this.outName = outName;
     }
-
 }

@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * Base plugin to execute the specifics of building Garmin wearable software with platform specific tooling.
  */
 abstract class BaseGarminBuildPlugin<E extends GarminBuildExtension, T extends BaseGarminBuildTask> extends BaseGarminPlugin<E, T>
-    implements IProjectPublishableTask<T>
+        implements IProjectPublishableTask<T>
 {
     @Override
     public void apply(Project project)
@@ -63,7 +63,8 @@ abstract class BaseGarminBuildPlugin<E extends GarminBuildExtension, T extends B
         }
 
         Task publish = project.getTasks().findByPath("publish");
-        if(publish != null) {
+        if (publish != null)
+        {
             publish.dependsOn(buildGarminTask);
         }
 
