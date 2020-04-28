@@ -1,11 +1,16 @@
 package com.chesapeaketechnology.gradle.plugins.garmin.tasks;
 
+import org.gradle.api.GradleException;
+import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.artifacts.Dependency;
+import org.gradle.api.artifacts.DependencySet;
 import org.gradle.api.tasks.Input;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.util.Collections;
-import java.util.List;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -37,6 +42,8 @@ public class BuildGarminAppTask extends BaseGarminTask
     @Override
     protected void runBuild(File binaryDir, ByteArrayOutputStream byteArrayOutputStream)
     {
+        processDependencies(byteArrayOutputStream);
+
         Stream<String> devicesStream = parallel ? devices.parallelStream() : devices.stream();
 
         devicesStream.forEach(device -> {
@@ -59,6 +66,97 @@ public class BuildGarminAppTask extends BaseGarminTask
 
             execTask(sdkDirectory + APP_BUILD, args, byteArrayOutputStream);
         });
+    }
+
+    private void processDependencies(final ByteArrayOutputStream byteArrayOutputStream)
+    {
+        File dependenciesDir = createChildOutputDirectory(getProject().getBuildDir(), "dependencies", byteArrayOutputStream);
+
+        if (dependenciesDir == null)
+        {
+            throw new GradleException("Cannot process dependencies due to null dependency directory!");
+        }
+
+        Configuration barrelConfig = getProject().getConfigurations().getByName("barrel");
+        DependencySet barrelDependencies = barrelConfig.getAllDependencies();
+
+        Iterator<Dependency> iterator = barrelDependencies.iterator();
+
+        while (iterator.hasNext())
+        {
+            Dependency next = iterator.next();
+            Set<File> files = barrelConfig.files(next);
+
+            files.forEach(file -> {
+                        try
+                        {
+                            String[] split = file.getName().split("-");
+                            File dependency = new File(dependenciesDir.getPath() + SEPARATOR + split[0] + ".barrel");
+                            Files.copy(file.toPath(), dependency.toPath(),
+                                    StandardCopyOption.REPLACE_EXISTING);
+                        } catch (IOException e)
+                        {
+                            getLogger().error("Unable to copy barrel dependency to the dependency directory!", e);
+                        }
+                    }
+            );
+        }
+
+        appendToJungleFile();
+    }
+
+    private void appendToJungleFile()
+    {
+        final String dependencyDir = "build" + SEPARATOR + "dependencies";
+        final String DEFAULT_JUNGLE_FILE = "monkey.jungle";
+        final String BARREL_PATH_PROP = "base.barrelPath";
+
+        Properties properties = new Properties();
+
+        try (InputStream input = new FileInputStream(DEFAULT_JUNGLE_FILE))
+        {
+            properties.load(input);
+        } catch (IOException ex)
+        {
+            getLogger().error("An error has occurred when attempting to read the default jungle file!", ex);
+        }
+
+        try (OutputStream outputStream = new FileOutputStream(DEFAULT_JUNGLE_FILE))
+        {
+            String barrelPathProp = properties.getProperty(BARREL_PATH_PROP);
+
+            if (barrelPathProp != null)
+            {
+                if (!barrelPathProp.contains(dependencyDir))
+                {
+                    barrelPathProp += ";" + dependencyDir;
+                }
+            } else
+            {
+                barrelPathProp = dependencyDir;
+            }
+
+            properties.setProperty(BARREL_PATH_PROP, barrelPathProp);
+            properties.store(outputStream, null);
+        } catch (IOException e)
+        {
+            getLogger().error("An error has occurred when attempting to write to the default jungle file!", e);
+        }
+    }
+
+    @Override
+    public List<File> getGeneratedArtifacts()
+    {
+        final String binaryDirectoryPath = getOutputDirectory() + SEPARATOR + getBinaryDirectoryName() + SEPARATOR;
+
+        return devices.stream()
+                .map(deviceStr -> {
+                    final String deviceDirectory = deviceStr + SEPARATOR;
+                    final String PRGFileName = outName + "-" + deviceStr + ".prg";
+                    return new File(binaryDirectoryPath + deviceDirectory + PRGFileName);
+                })
+                .filter(File::exists)
+                .collect(Collectors.toList());
     }
 
     public boolean isParallel()
