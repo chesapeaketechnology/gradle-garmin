@@ -4,6 +4,9 @@ import com.chesapeaketechnology.gradle.plugins.garmin.extensions.GarminBarrelBui
 import com.chesapeaketechnology.gradle.plugins.garmin.tasks.build.BuildGarminBarrelTask;
 import org.gradle.api.Project;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Plugin to execute the specifics of building Garmin wearable libraries (barrels).
  * <p>
@@ -11,22 +14,21 @@ import org.gradle.api.Project;
  *
  * @see BaseGarminBuildPlugin
  */
-public class GradleGarminBarrelPlugin extends BaseGarminBuildPlugin
+public class GradleGarminBarrelPlugin extends BaseGarminBuildPlugin<GarminBarrelBuildExtension, BuildGarminBarrelTask>
 {
     private static final String GARMIN_BARREL_EXT = "garminBarrel";
     public static final String BUILD_GARMIN_BARREL = "buildGarminBarrel";
 
     @Override
-    public void apply(Project project)
+    protected GarminBarrelBuildExtension createExtension(Project project)
     {
-        super.apply(project);
+        return (GarminBarrelBuildExtension) createDefaultGarminBuildExtension(project, GARMIN_BARREL_EXT, GarminBarrelBuildExtension.class);
+    }
 
-        GarminBarrelBuildExtension appExtension = (GarminBarrelBuildExtension) createDefaultGarminBuildExtension(project,
-                GARMIN_BARREL_EXT, GarminBarrelBuildExtension.class);
-        project.afterEvaluate(proj -> {
-            createDefaultGarminBuildTask(proj, appExtension, BUILD_GARMIN_BARREL,
-                    BuildGarminBarrelTask.class);
-            createRunTask(proj, appExtension);
-        });
+    @Override
+    protected List<BuildGarminBarrelTask> createTasks(Project project, GarminBarrelBuildExtension extension)
+    {
+        return Collections.singletonList((BuildGarminBarrelTask) createDefaultGarminBuildTask(project, extension, BUILD_GARMIN_BARREL,
+                BuildGarminBarrelTask.class));
     }
 }

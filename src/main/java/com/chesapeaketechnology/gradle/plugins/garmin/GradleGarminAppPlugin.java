@@ -6,6 +6,8 @@ import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.Project;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Plugin to execute the specifics of building Garmin wearable applications.
@@ -14,22 +16,22 @@ import java.io.File;
  *
  * @see BaseGarminBuildPlugin
  */
-public class GradleGarminAppPlugin extends BaseGarminBuildPlugin
+public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppBuildExtension, BuildGarminAppTask>
 {
     private static final String GARMIN_APP_EXT = "garminApp";
     public static final String BUILD_GARMIN_APP = "buildGarminApp";
-
     private static final String DEVELOPER_KEY_ENV = "GARMIN_DEV_KEY";
 
     @Override
-    public void apply(Project project)
+    protected GarminAppBuildExtension createExtension(Project project)
     {
-        super.apply(project);
-        GarminAppBuildExtension appBuildExt = createAppBuildExt(project);
-        project.afterEvaluate(proj -> {
-            createBuildTask(proj, appBuildExt);
-            createRunTask(proj, appBuildExt);
-        });
+        return createAppBuildExt(project);
+    }
+
+    @Override
+    protected List<BuildGarminAppTask> createTasks(Project project, GarminAppBuildExtension extension)
+    {
+        return Collections.singletonList(createBuildTask(project, extension));
     }
 
     private GarminAppBuildExtension createAppBuildExt(Project project)
