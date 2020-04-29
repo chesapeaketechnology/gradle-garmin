@@ -5,9 +5,7 @@ import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,29 +24,24 @@ public abstract class BaseGarminBuildTask extends BaseGarminTask
     @TaskAction
     void start()
     {
-
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
         //create the root directory that the binary files will live under
-        File binaryDir = createChildOutputDirectory(outputDirectory, getBinaryDirectoryName(), byteArrayOutputStream);
+        File binaryDir = createChildOutputDirectory(outputDirectory, getBinaryDirectoryName());
         if (binaryDir == null)
         {
-            getLogger().error("Failed creating binary directory: {}", byteArrayOutputStream);
-            //Something happened creating the binary directory; return
-            byteArrayOutputStream.reset();
+            logError("Failed creating binary directory!");
             return;
         }
 
-        runBuild(binaryDir, byteArrayOutputStream);
+        runBuild(binaryDir);
     }
 
     protected abstract String getBinaryDirectoryName();
 
-    protected abstract void runBuild(File binaryDir, ByteArrayOutputStream byteArrayOutputStream);
+    protected abstract void runBuild(File binaryDir);
 
     public abstract List<File> getGeneratedArtifacts();
 
-    protected File createChildOutputDirectory(File parentDir, String childDirName, ByteArrayOutputStream os)
+    protected File createChildOutputDirectory(File parentDir, String childDirName)
     {
         File childDir = new File(parentDir.getPath() + SEPARATOR + childDirName);
 
@@ -56,15 +49,8 @@ public abstract class BaseGarminBuildTask extends BaseGarminTask
         {
             if (!childDir.mkdir())
             {
-                try
-                {
-                    os.write(("Unable to create child dir: " + childDirName).getBytes());
-                    return null;
-                } catch (IOException e)
-                {
-                    getLogger().error("Unable to create child dir: {}", e);
-                    return null;
-                }
+                logError("Unable to create child dir: " + childDirName);
+                return null;
             }
         }
 

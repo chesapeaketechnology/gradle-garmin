@@ -25,12 +25,12 @@ public class BuildGarminBarrelTask extends BaseGarminBuildTask
     }
 
     @Override
-    protected void runBuild(File binaryDir, ByteArrayOutputStream byteArrayOutputStream)
+    protected void runBuild(File binaryDir)
     {
         List<String> args = createDefaultArgs();
         args.add("--output");
         args.add(binaryDir + SEPARATOR + outName + ".barrel");
-        execTask(sdkDirectory + BARREL_BUILD, args, byteArrayOutputStream);
+        execTask(sdkDirectory + BARREL_BUILD, args);
     }
 
     @Override

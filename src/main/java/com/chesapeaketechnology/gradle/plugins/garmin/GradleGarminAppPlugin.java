@@ -1,11 +1,14 @@
 package com.chesapeaketechnology.gradle.plugins.garmin;
 
 import com.chesapeaketechnology.gradle.plugins.garmin.extensions.GarminAppBuildExtension;
+import com.chesapeaketechnology.gradle.plugins.garmin.tasks.BaseGarminTask;
 import com.chesapeaketechnology.gradle.plugins.garmin.tasks.build.BuildGarminAppTask;
+import com.chesapeaketechnology.gradle.plugins.garmin.tasks.test.TestGarminAppTask;
 import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.Project;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,10 +19,11 @@ import java.util.List;
  *
  * @see BaseGarminBuildPlugin
  */
-public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppBuildExtension, BuildGarminAppTask>
+public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppBuildExtension>
 {
     private static final String GARMIN_APP_EXT = "garminApp";
     public static final String BUILD_GARMIN_APP = "buildGarminApp";
+    public static final String TEST_GARMIN_APP = "testGarminApp";
     private static final String DEVELOPER_KEY_ENV = "GARMIN_DEV_KEY";
 
     @Override
@@ -37,11 +41,16 @@ public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppBuildE
     }
 
     @Override
-    protected List<BuildGarminAppTask> createTasks(Project project, GarminAppBuildExtension extension)
+    protected List<BaseGarminTask> createTasks(Project project, GarminAppBuildExtension extension)
     {
         BuildGarminAppTask buildTask = createBuildTask(project, extension);
+        TestGarminAppTask testTask = createTestTask(project, extension);
+        testTask.dependsOn(buildTask);
+        testTask.dependsOn(project.getTasks().getByPath(START_CONNECT_IQ_TASK));
+        testTask.getOutputs().upToDateWhen(task -> false);
+
         configurePublishing(project, buildTask);
-        return Collections.singletonList(buildTask);
+        return Collections.unmodifiableList(Arrays.asList(buildTask, testTask));
     }
 
     private GarminAppBuildExtension createAppBuildExt(Project project)
@@ -77,6 +86,15 @@ public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppBuildE
 
         defaultGarminTask.setParallel(appExtension.isParallelBuild());
         return defaultGarminTask;
+    }
+
+    private TestGarminAppTask createTestTask(Project project, GarminAppBuildExtension extension)
+    {
+        TestGarminAppTask testGarminAppTask = (TestGarminAppTask) super.createDefaultGarminTask(project, extension, TEST_GARMIN_APP, TestGarminAppTask.class);
+        testGarminAppTask.setDevices(extension.getTargetDevices());
+        testGarminAppTask.setOutName(extension.getAppName());
+        testGarminAppTask.setOutputDirectory(new File(extension.getOutputDirectory()));
+        return testGarminAppTask;
     }
 
     @Override

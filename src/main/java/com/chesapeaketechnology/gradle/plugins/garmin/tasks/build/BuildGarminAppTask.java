@@ -41,19 +41,18 @@ public class BuildGarminAppTask extends BaseGarminBuildTask
     }
 
     @Override
-    protected void runBuild(File binaryDir, ByteArrayOutputStream byteArrayOutputStream)
+    protected void runBuild(File binaryDir)
     {
-        processDependencies(byteArrayOutputStream);
+        processDependencies();
 
         Stream<String> devicesStream = parallel ? devices.parallelStream() : devices.stream();
 
         devicesStream.forEach(device -> {
-            File deviceDirectory = createChildOutputDirectory(binaryDir, device, byteArrayOutputStream);
+            File deviceDirectory = createChildOutputDirectory(binaryDir, device);
 
             if (deviceDirectory == null)
             {
-                getLogger().error("Error while creating the device directory, skipping this device: {}", byteArrayOutputStream);
-                byteArrayOutputStream.reset();
+                logError("Error while creating the device directory, skipping this device.");
                 return;
             }
 
@@ -65,13 +64,13 @@ public class BuildGarminAppTask extends BaseGarminBuildTask
             args.add("--output");
             args.add(deviceDirectory + SEPARATOR + outName + "-" + device + ".prg");
 
-            execTask(sdkDirectory + APP_BUILD, args, byteArrayOutputStream);
+            execTask(sdkDirectory + APP_BUILD, args);
         });
     }
 
-    private void processDependencies(final ByteArrayOutputStream byteArrayOutputStream)
+    private void processDependencies()
     {
-        File dependenciesDir = createChildOutputDirectory(getProject().getBuildDir(), "dependencies", byteArrayOutputStream);
+        File dependenciesDir = createChildOutputDirectory(getProject().getBuildDir(), "dependencies");
 
         if (dependenciesDir == null)
         {
@@ -97,7 +96,7 @@ public class BuildGarminAppTask extends BaseGarminBuildTask
                                     StandardCopyOption.REPLACE_EXISTING);
                         } catch (IOException e)
                         {
-                            getLogger().error("Unable to copy barrel dependency to the dependency directory!", e);
+                            logException("Unable to copy barrel dependency to the dependency directory!", e);
                         }
                     }
             );
@@ -119,7 +118,7 @@ public class BuildGarminAppTask extends BaseGarminBuildTask
             properties.load(input);
         } catch (IOException ex)
         {
-            getLogger().error("An error has occurred when attempting to read the default jungle file!", ex);
+            logException("An error has occurred when attempting to read the default jungle file!", ex);
         }
 
         try (OutputStream outputStream = new FileOutputStream(DEFAULT_JUNGLE_FILE))
@@ -141,7 +140,7 @@ public class BuildGarminAppTask extends BaseGarminBuildTask
             properties.store(outputStream, null);
         } catch (IOException e)
         {
-            getLogger().error("An error has occurred when attempting to write to the default jungle file!", e);
+            logException("An error has occurred when attempting to write to the default jungle file!", e);
         }
     }
 

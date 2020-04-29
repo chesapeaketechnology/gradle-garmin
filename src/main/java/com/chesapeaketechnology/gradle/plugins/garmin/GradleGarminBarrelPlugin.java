@@ -1,6 +1,7 @@
 package com.chesapeaketechnology.gradle.plugins.garmin;
 
 import com.chesapeaketechnology.gradle.plugins.garmin.extensions.GarminBarrelBuildExtension;
+import com.chesapeaketechnology.gradle.plugins.garmin.tasks.BaseGarminTask;
 import com.chesapeaketechnology.gradle.plugins.garmin.tasks.build.BuildGarminBarrelTask;
 import org.gradle.api.Project;
 
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @see BaseGarminBuildPlugin
  */
-public class GradleGarminBarrelPlugin extends BaseGarminBuildPlugin<GarminBarrelBuildExtension, BuildGarminBarrelTask>
+public class GradleGarminBarrelPlugin extends BaseGarminBuildPlugin<GarminBarrelBuildExtension>
 {
     private static final String GARMIN_BARREL_EXT = "garminBarrel";
     public static final String BUILD_GARMIN_BARREL = "buildGarminBarrel";
@@ -26,7 +27,7 @@ public class GradleGarminBarrelPlugin extends BaseGarminBuildPlugin<GarminBarrel
     }
 
     @Override
-    protected List<BuildGarminBarrelTask> createTasks(Project project, GarminBarrelBuildExtension extension)
+    protected List<BaseGarminTask> createTasks(Project project, GarminBarrelBuildExtension extension)
     {
         BuildGarminBarrelTask barrelBuildTask = (BuildGarminBarrelTask) createDefaultGarminBuildTask(project, extension, BUILD_GARMIN_BARREL,
                 BuildGarminBarrelTask.class);

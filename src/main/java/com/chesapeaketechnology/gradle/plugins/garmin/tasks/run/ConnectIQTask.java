@@ -13,6 +13,6 @@ public class ConnectIQTask extends BaseGarminTask
     @TaskAction
     void start()
     {
-        execTask(getBinDirectory() + CONNECTIQ_EXEC, Collections.emptyList(), new ByteArrayOutputStream());
+        execTask(getBinDirectory() + CONNECTIQ_EXEC, Collections.emptyList());
     }
 }

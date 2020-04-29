@@ -11,7 +11,7 @@ import org.gradle.api.plugins.JavaBasePlugin;
 import java.io.File;
 import java.util.List;
 
-public abstract class BaseGarminPlugin<E extends BaseGarminExtension, T extends BaseGarminTask> implements Plugin<Project>
+public abstract class BaseGarminPlugin<E extends BaseGarminExtension> implements Plugin<Project>
 {
     private final String GARMIN_SDK_HOME = "GARMIN_SDK_HOME";
     protected static final String START_CONNECT_IQ_TASK = "connectIQ";
@@ -30,7 +30,7 @@ public abstract class BaseGarminPlugin<E extends BaseGarminExtension, T extends 
 
     protected abstract E createExtension(Project project);
 
-    protected abstract List<T> createTasks(Project project, E extension);
+    protected abstract List<BaseGarminTask> createTasks(Project project, E extension);
 
     protected BaseGarminTask createDefaultGarminTask(Project project, BaseGarminExtension extension, String taskName,
                                                      Class<? extends BaseGarminTask> taskClazz)
