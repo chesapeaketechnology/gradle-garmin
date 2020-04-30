@@ -1,6 +1,6 @@
 package com.chesapeaketechnology.gradle.plugins.garmin;
 
-import com.chesapeaketechnology.gradle.plugins.garmin.extensions.GarminAppBuildExtension;
+import com.chesapeaketechnology.gradle.plugins.garmin.extensions.GarminAppExtension;
 import com.chesapeaketechnology.gradle.plugins.garmin.tasks.BaseGarminTask;
 import com.chesapeaketechnology.gradle.plugins.garmin.tasks.build.BuildGarminAppTask;
 import com.chesapeaketechnology.gradle.plugins.garmin.tasks.test.TestGarminAppTask;
@@ -15,16 +15,15 @@ import java.util.List;
 /**
  * Plugin to execute the specifics of building Garmin wearable applications.
  * <p>
- * The {@link GarminAppBuildExtension extension} provides a number of basics for configuring the wearable application for building.
+ * The {@link GarminAppExtension extension} provides a number of basics for configuring the wearable application for building.
  *
  * @see BaseGarminBuildPlugin
  */
-public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppBuildExtension>
+public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppExtension>
 {
     private static final String GARMIN_APP_EXT = "garminApp";
     public static final String BUILD_GARMIN_APP = "buildGarminApp";
     public static final String TEST_GARMIN_APP = "testGarminApp";
-    private static final String DEVELOPER_KEY_ENV = "GARMIN_DEV_KEY";
 
     @Override
     public void apply(Project project)
@@ -35,13 +34,13 @@ public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppBuildE
     }
 
     @Override
-    protected GarminAppBuildExtension createExtension(Project project)
+    protected GarminAppExtension createExtension(Project project)
     {
         return createAppBuildExt(project);
     }
 
     @Override
-    protected List<BaseGarminTask> createTasks(Project project, GarminAppBuildExtension extension)
+    protected List<BaseGarminTask> createTasks(Project project, GarminAppExtension extension)
     {
         BuildGarminAppTask buildTask = createBuildTask(project, extension);
         TestGarminAppTask testTask = createTestTask(project, extension);
@@ -53,22 +52,16 @@ public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppBuildE
         return Collections.unmodifiableList(Arrays.asList(buildTask, testTask));
     }
 
-    private GarminAppBuildExtension createAppBuildExt(Project project)
+    private GarminAppExtension createAppBuildExt(Project project)
     {
-        GarminAppBuildExtension appExtension = (GarminAppBuildExtension) createDefaultGarminBuildExtension(project, GARMIN_APP_EXT,
-                GarminAppBuildExtension.class);
+        GarminAppExtension appExtension = (GarminAppExtension) createDefaultGarminBuildExtension(project, GARMIN_APP_EXT,
+                GarminAppExtension.class);
         appExtension.setParallelBuild(true);
-
-        String devKey = System.getenv(DEVELOPER_KEY_ENV);
-        if (devKey != null)
-        {
-            appExtension.setDeveloperKey(devKey);
-        }
 
         return appExtension;
     }
 
-    private BuildGarminAppTask createBuildTask(Project proj, GarminAppBuildExtension appExtension)
+    private BuildGarminAppTask createBuildTask(Project proj, GarminAppExtension appExtension)
     {
         BuildGarminAppTask defaultGarminTask = (BuildGarminAppTask) createDefaultGarminBuildTask(proj, appExtension,
                 BUILD_GARMIN_APP, BuildGarminAppTask.class);
@@ -88,12 +81,13 @@ public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppBuildE
         return defaultGarminTask;
     }
 
-    private TestGarminAppTask createTestTask(Project project, GarminAppBuildExtension extension)
+    private TestGarminAppTask createTestTask(Project project, GarminAppExtension extension)
     {
         TestGarminAppTask testGarminAppTask = (TestGarminAppTask) super.createDefaultGarminTask(project, extension, TEST_GARMIN_APP, TestGarminAppTask.class);
-        testGarminAppTask.setDevices(extension.getTargetDevices());
+        testGarminAppTask.setDevice(extension.getTest().getDevice());
         testGarminAppTask.setOutName(extension.getAppName());
         testGarminAppTask.setOutputDirectory(new File(extension.getOutputDirectory()));
+
         return testGarminAppTask;
     }
 

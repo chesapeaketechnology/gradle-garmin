@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
 abstract class BaseGarminBuildPlugin<E extends GarminBuildExtension> extends BaseGarminPlugin<E>
         implements IProjectPublishableTask<BaseGarminBuildTask>
 {
+    private static final String DEVELOPER_KEY_ENV = "GARMIN_DEV_KEY";
+
     @Override
     public void apply(Project project)
     {
@@ -33,6 +35,11 @@ abstract class BaseGarminBuildPlugin<E extends GarminBuildExtension> extends Bas
         garminBuildExtension.setJungleFiles(Collections.singletonList("monkey.jungle"));
         garminBuildExtension.setAppName(project.getName());
         garminBuildExtension.setOutputDirectory(project.getBuildDir().getPath());
+        String devKey = System.getenv(DEVELOPER_KEY_ENV);
+        if (devKey != null)
+        {
+            garminBuildExtension.setDeveloperKey(devKey);
+        }
         return garminBuildExtension;
     }
 

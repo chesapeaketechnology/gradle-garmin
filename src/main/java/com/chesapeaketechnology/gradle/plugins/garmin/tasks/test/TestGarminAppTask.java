@@ -1,19 +1,13 @@
 package com.chesapeaketechnology.gradle.plugins.garmin.tasks.test;
 
-import com.chesapeaketechnology.gradle.plugins.garmin.tasks.BaseGarminTask;
-import com.chesapeaketechnology.gradle.plugins.garmin.tasks.common.IFlushListener;
-import org.gradle.api.GradleException;
-import org.gradle.api.logging.LogLevel;
 import org.gradle.api.tasks.Input;
-import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.OutputDirectory;
-import org.gradle.api.tasks.TaskAction;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestGarminAppTask extends BaseGarminTask implements IFlushListener
+public class TestGarminAppTask extends BaseTestTask
 {
     @OutputDirectory
     protected File outputDirectory;
@@ -22,27 +16,21 @@ public class TestGarminAppTask extends BaseGarminTask implements IFlushListener
     protected String outName;
 
     @Input
-    private List<String> devices;
+    private String device;
 
-    @Input
-    @Optional
-    private String testDevice;
-
-    protected List<String> getArgs()
+    @Override
+    public String getExecName()
     {
-        List<String> args = new ArrayList<>();
-        args.add(outputDirectory + SEPARATOR + "devices" + SEPARATOR + devices.get(0) + SEPARATOR + outName + "-" + devices.get(0) + ".prg");
-        args.add(devices.get(0));
-        args.add("-t");
-        return args;
+        return "monkeydo";
     }
 
-    @TaskAction
-    protected void run()
+    public List<String> getArgs()
     {
-        errorStream.setFlushListener(this);
-        infoStream.setFlushListener(this);
-        execTask(getBinDirectory() + "monkeydo" + (isWindows ? ".bat" : ""), getArgs());
+        List<String> args = new ArrayList<>();
+        args.add(outputDirectory + SEPARATOR + "devices" + SEPARATOR + device + SEPARATOR + outName + "-" + device + ".prg");
+        args.add(device);
+        args.add("-t");
+        return args;
     }
 
     public File getOutputDirectory()
@@ -65,32 +53,13 @@ public class TestGarminAppTask extends BaseGarminTask implements IFlushListener
         this.outName = outName;
     }
 
-    public List<String> getDevices()
+    public String getDevice()
     {
-        return devices;
+        return device;
     }
 
-    public void setDevices(List<String> devices)
+    public void setDevice(String device)
     {
-        this.devices = devices;
-    }
-
-    public String getTestDevice()
-    {
-        return testDevice;
-    }
-
-    public void setTestDevice(String testDevice)
-    {
-        this.testDevice = testDevice;
-    }
-
-    @Override
-    public void flushing(String toBeFlushed)
-    {
-        if (toBeFlushed.contains("Error:"))
-        {
-            throw new GradleException(toBeFlushed);
-        }
+        this.device = device;
     }
 }

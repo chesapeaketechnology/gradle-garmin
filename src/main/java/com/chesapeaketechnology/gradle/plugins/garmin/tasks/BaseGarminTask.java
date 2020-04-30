@@ -1,26 +1,20 @@
 package com.chesapeaketechnology.gradle.plugins.garmin.tasks;
 
+import com.chesapeaketechnology.gradle.plugins.garmin.tasks.common.IExecutable;
 import com.chesapeaketechnology.gradle.plugins.garmin.tasks.common.LogOutputStream;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.LogLevel;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.Optional;
-import org.gradle.api.tasks.OutputDirectory;
-import org.gradle.api.tasks.TaskAction;
-import org.gradle.process.ExecResult;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * Base Garmin task that invokes platform build tools from Garmin to produce wearable libraries and applications.
  */
-public abstract class BaseGarminTask extends DefaultTask
+public abstract class BaseGarminTask extends DefaultTask implements IExecutable
 {
     @InputDirectory
     @Optional
@@ -36,10 +30,10 @@ public abstract class BaseGarminTask extends DefaultTask
     protected final LogOutputStream infoStream = new LogOutputStream(getLogger(), LogLevel.INFO);
     protected final LogOutputStream errorStream = new LogOutputStream(getLogger(), LogLevel.ERROR);
 
-    protected void execTask(String execPath, List<String> args)
+    protected void execTask(List<String> args)
     {
         getProject().exec(execSpec -> {
-            execSpec.setExecutable(execPath);
+            execSpec.setExecutable(buildExecPath(getExecName()));
             execSpec.setArgs(args);
             execSpec.setStandardOutput(infoStream);
             execSpec.setErrorOutput(errorStream);
@@ -51,11 +45,13 @@ public abstract class BaseGarminTask extends DefaultTask
         return sdkDirectory + SEPARATOR + "bin" + SEPARATOR;
     }
 
-    protected void logError(String errorMessage) {
+    protected void logError(String errorMessage)
+    {
         errorStream.getLogger().error(errorMessage);
     }
 
-    protected void logException(String errorMessage, Exception e) {
+    protected void logException(String errorMessage, Exception e)
+    {
         errorStream.getLogger().error(errorMessage, e);
     }
 
@@ -77,5 +73,10 @@ public abstract class BaseGarminTask extends DefaultTask
     public void setAppDirectory(File appDirectory)
     {
         this.appDirectory = appDirectory;
+    }
+
+    protected String buildExecPath(String execName)
+    {
+        return getBinDirectory() + execName + (isWindows ? ".bat" : "");
     }
 }

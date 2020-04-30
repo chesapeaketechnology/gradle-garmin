@@ -64,7 +64,7 @@ public class BuildGarminAppTask extends BaseGarminBuildTask
             args.add("--output");
             args.add(deviceDirectory + SEPARATOR + outName + "-" + device + ".prg");
 
-            execTask(sdkDirectory + APP_BUILD, args);
+            execTask(args);
         });
     }
 
@@ -187,5 +187,17 @@ public class BuildGarminAppTask extends BaseGarminBuildTask
     public void setDeveloperKey(File developerKey)
     {
         this.developerKey = developerKey;
+    }
+
+    @Override
+    public String getExecName()
+    {
+        return "monkeyc";
+    }
+
+    @Override
+    public List<String> getArgs()
+    {
+        return null;
     }
 }

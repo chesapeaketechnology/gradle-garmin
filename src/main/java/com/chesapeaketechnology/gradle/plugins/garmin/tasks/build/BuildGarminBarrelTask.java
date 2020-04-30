@@ -2,7 +2,6 @@ package com.chesapeaketechnology.gradle.plugins.garmin.tasks.build;
 
 import com.chesapeaketechnology.gradle.plugins.garmin.tasks.BaseGarminTask;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +29,7 @@ public class BuildGarminBarrelTask extends BaseGarminBuildTask
         List<String> args = createDefaultArgs();
         args.add("--output");
         args.add(binaryDir + SEPARATOR + outName + ".barrel");
-        execTask(sdkDirectory + BARREL_BUILD, args);
+        execTask(args);
     }
 
     @Override
@@ -39,5 +38,20 @@ public class BuildGarminBarrelTask extends BaseGarminBuildTask
         final String binaryDirectoryPath = getOutputDirectory() + SEPARATOR + getBinaryDirectoryName() + SEPARATOR;
         File file = new File(binaryDirectoryPath + outName + ".barrel");
         return file.exists() ? Collections.singletonList(file) : Collections.emptyList();
+    }
+
+    @Override
+    public String getExecName()
+    {
+        return "barrelbuild";
+    }
+
+    @Override
+    public List<String> getArgs()
+    {
+        List<String> args = createDefaultArgs();
+        args.add("--output");
+        args.add(outputDirectory.getPath() + SEPARATOR + getBinaryDirectoryName() + SEPARATOR + outName + ".barrel");
+        return null;
     }
 }
