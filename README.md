@@ -103,3 +103,55 @@ building each type of project are provided.
 
 * Apps: `gradlew buildGarminApp`
 * Barrels: `gradlew buildGarminBarrel`
+
+### Testing
+To run unit tests, the test configuration can be added to both apps and barrels. Adding the test configuration
+is as simple as:
+
+```groovy
+garminApp {
+    appName = 'my-app'
+    targetDevices = ["fenix5plus", "fenix6pro"]
+
+    test {
+        device = 'fenix5plus'
+    }
+}
+```
+
+The `device` tag is a required element and tells the test phase which device to simulate and run tests against.
+
+Once the configuration is set, execute `gradle test` to run all unit tests.
+
+### Publishing
+This is a new feature that isn't available in Garmin's SDK or via the Eclipse plugin. Built artifacts can now be published to 
+maven repositories by default.
+
+In either an app or barrel project, execute `gradle publishToMavenLocal` which will publish the artifact to your local
+maven repository.
+
+Any repository configured according to the [maven-publish](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:repositories)
+instruction set will be available as a target repository for Garmin project builds.
+
+```groovy
+publishing {
+    repositories {
+        maven {
+            // change to point to your repo, e.g. http://my.org/repo
+            url = "$buildDir/repo"
+        }
+    }
+}
+```
+Running `gradle publish` will publish your build artifact(s) to all of your defined repositories. 
+
+#### Barrel Dependencies
+Another new and useful feature is the ability to depend on published barrel artifacts from any configured
+repository. Simply use the `barrel` scope in front of any barrel dependency:
+
+```groovy
+dependencies {
+    barrel "com.test:my-awesome-barrel:1.0.0@barrel"
+}
+```
+Since barrel files have a `.barrel` extension, notice that we also have to specify the extension with the `@` notation.
