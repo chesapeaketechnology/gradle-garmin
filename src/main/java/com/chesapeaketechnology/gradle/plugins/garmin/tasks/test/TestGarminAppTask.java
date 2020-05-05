@@ -7,6 +7,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Test task for Garmin apps
+ */
 public class TestGarminAppTask extends BaseTestTask
 {
     @OutputDirectory

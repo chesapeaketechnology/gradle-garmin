@@ -1,5 +1,8 @@
 package com.chesapeaketechnology.gradle.plugins.garmin.extensions;
 
+/**
+ * Base extension class for all Garmin extensions
+ */
 public class BaseGarminExtension
 {
     private String sdkDirectory;

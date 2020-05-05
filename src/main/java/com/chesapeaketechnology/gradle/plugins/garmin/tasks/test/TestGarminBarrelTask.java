@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO: class description
+ * Test class for Garmin Barrels
  */
 public class TestGarminBarrelTask extends BaseTestTask
 {

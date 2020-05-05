@@ -5,6 +5,9 @@ import com.chesapeaketechnology.gradle.plugins.garmin.tasks.common.IFlushListene
 import org.gradle.api.GradleException;
 import org.gradle.api.tasks.TaskAction;
 
+/**
+ * Base test task which integrates into the test phase of the build
+ */
 public abstract class BaseTestTask extends BaseGarminTask implements IFlushListener
 {
     @TaskAction

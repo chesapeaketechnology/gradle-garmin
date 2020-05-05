@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Base abstract build task for apps and barrels
+ */
 public abstract class BaseGarminBuildTask extends BaseGarminTask
 {
     @OutputDirectory

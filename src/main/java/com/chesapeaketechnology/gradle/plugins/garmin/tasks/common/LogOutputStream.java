@@ -5,6 +5,9 @@ import org.gradle.api.logging.Logger;
 
 import java.io.ByteArrayOutputStream;
 
+/**
+ * Utility class to assist with logging
+ */
 public class LogOutputStream extends ByteArrayOutputStream
 {
     private final Logger logger;

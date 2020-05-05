@@ -6,6 +6,9 @@ import org.gradle.api.tasks.TaskAction;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Task for starting the ConnectIQ application
+ */
 public class ConnectIQTask extends BaseGarminTask
 {
     @TaskAction

@@ -1,5 +1,8 @@
 package com.chesapeaketechnology.gradle.plugins.garmin.extensions;
 
+/**
+ * Gradle extension for the Test configuration
+ */
 public class TestExtension
 {
     private String device;
