@@ -53,6 +53,7 @@ script. It is recommended that these be set to generify the build.
 * `GARMIN_DEV_KEY` - The location of the user generated Garmin developer key. Information on generating a developer key
 for signing your Garmin applications can be found in the Garmin [Getting Started Guide](https://developer.garmin.com/connect-iq/programmers-guide/getting-started).
 
+*WINDOWS USERS* - Make sure your dev key path contains the dev key extension - ie. `C:\\<your_path>\\developer_key.der`
 ### Configuration
 Both Apps and Barrels share some of the same configuration items.
 
