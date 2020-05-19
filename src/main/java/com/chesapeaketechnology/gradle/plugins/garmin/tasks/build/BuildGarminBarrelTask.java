@@ -1,6 +1,7 @@
-package com.chesapeaketechnology.gradle.plugins.garmin.tasks;
+package com.chesapeaketechnology.gradle.plugins.garmin.tasks.build;
 
-import java.io.ByteArrayOutputStream;
+import com.chesapeaketechnology.gradle.plugins.garmin.tasks.BaseGarminTask;
+
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * @see BaseGarminTask
  */
-public class BuildGarminBarrelTask extends BaseGarminTask
+public class BuildGarminBarrelTask extends BaseGarminBuildTask
 {
     private final String BARREL_BUILD = SEPARATOR + "bin" + SEPARATOR + "barrelbuild" + (isWindows ? ".bat" : "");
 
@@ -23,12 +24,12 @@ public class BuildGarminBarrelTask extends BaseGarminTask
     }
 
     @Override
-    protected void runBuild(File binaryDir, ByteArrayOutputStream byteArrayOutputStream)
+    protected void runBuild(File binaryDir)
     {
         List<String> args = createDefaultArgs();
         args.add("--output");
         args.add(binaryDir + SEPARATOR + outName + ".barrel");
-        execTask(sdkDirectory + BARREL_BUILD, args, byteArrayOutputStream);
+        execTask(args);
     }
 
     @Override
@@ -37,5 +38,20 @@ public class BuildGarminBarrelTask extends BaseGarminTask
         final String binaryDirectoryPath = getOutputDirectory() + SEPARATOR + getBinaryDirectoryName() + SEPARATOR;
         File file = new File(binaryDirectoryPath + outName + ".barrel");
         return file.exists() ? Collections.singletonList(file) : Collections.emptyList();
+    }
+
+    @Override
+    public String getExecName()
+    {
+        return "barrelbuild";
+    }
+
+    @Override
+    public List<String> getArgs()
+    {
+        List<String> args = createDefaultArgs();
+        args.add("--output");
+        args.add(outputDirectory.getPath() + SEPARATOR + getBinaryDirectoryName() + SEPARATOR + outName + ".barrel");
+        return null;
     }
 }

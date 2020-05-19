@@ -1,5 +1,6 @@
-package com.chesapeaketechnology.gradle.plugins.garmin.tasks;
+package com.chesapeaketechnology.gradle.plugins.garmin.tasks.build;
 
+import com.chesapeaketechnology.gradle.plugins.garmin.tasks.BaseGarminTask;
 import org.gradle.api.GradleException;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.Dependency;
@@ -20,7 +21,7 @@ import java.util.stream.Stream;
  *
  * @see BaseGarminTask
  */
-public class BuildGarminAppTask extends BaseGarminTask
+public class BuildGarminAppTask extends BaseGarminBuildTask
 {
     @Input
     private List<String> devices;
@@ -40,19 +41,18 @@ public class BuildGarminAppTask extends BaseGarminTask
     }
 
     @Override
-    protected void runBuild(File binaryDir, ByteArrayOutputStream byteArrayOutputStream)
+    protected void runBuild(File binaryDir)
     {
-        processDependencies(byteArrayOutputStream);
+        processDependencies();
 
         Stream<String> devicesStream = parallel ? devices.parallelStream() : devices.stream();
 
         devicesStream.forEach(device -> {
-            File deviceDirectory = createChildOutputDirectory(binaryDir, device, byteArrayOutputStream);
+            File deviceDirectory = createChildOutputDirectory(binaryDir, device);
 
             if (deviceDirectory == null)
             {
-                getLogger().error("Error while creating the device directory, skipping this device: {}", byteArrayOutputStream);
-                byteArrayOutputStream.reset();
+                logError("Error while creating the device directory, skipping this device.");
                 return;
             }
 
@@ -64,13 +64,13 @@ public class BuildGarminAppTask extends BaseGarminTask
             args.add("--output");
             args.add(deviceDirectory + SEPARATOR + outName + "-" + device + ".prg");
 
-            execTask(sdkDirectory + APP_BUILD, args, byteArrayOutputStream);
+            execTask(args);
         });
     }
 
-    private void processDependencies(final ByteArrayOutputStream byteArrayOutputStream)
+    private void processDependencies()
     {
-        File dependenciesDir = createChildOutputDirectory(getProject().getBuildDir(), "dependencies", byteArrayOutputStream);
+        File dependenciesDir = createChildOutputDirectory(getProject().getBuildDir(), "dependencies");
 
         if (dependenciesDir == null)
         {
@@ -96,7 +96,7 @@ public class BuildGarminAppTask extends BaseGarminTask
                                     StandardCopyOption.REPLACE_EXISTING);
                         } catch (IOException e)
                         {
-                            getLogger().error("Unable to copy barrel dependency to the dependency directory!", e);
+                            logException("Unable to copy barrel dependency to the dependency directory!", e);
                         }
                     }
             );
@@ -118,7 +118,7 @@ public class BuildGarminAppTask extends BaseGarminTask
             properties.load(input);
         } catch (IOException ex)
         {
-            getLogger().error("An error has occurred when attempting to read the default jungle file!", ex);
+            logException("An error has occurred when attempting to read the default jungle file!", ex);
         }
 
         try (OutputStream outputStream = new FileOutputStream(DEFAULT_JUNGLE_FILE))
@@ -140,7 +140,7 @@ public class BuildGarminAppTask extends BaseGarminTask
             properties.store(outputStream, null);
         } catch (IOException e)
         {
-            getLogger().error("An error has occurred when attempting to write to the default jungle file!", e);
+            logException("An error has occurred when attempting to write to the default jungle file!", e);
         }
     }
 
@@ -187,5 +187,17 @@ public class BuildGarminAppTask extends BaseGarminTask
     public void setDeveloperKey(File developerKey)
     {
         this.developerKey = developerKey;
+    }
+
+    @Override
+    public String getExecName()
+    {
+        return "monkeyc";
+    }
+
+    @Override
+    public List<String> getArgs()
+    {
+        return null;
     }
 }

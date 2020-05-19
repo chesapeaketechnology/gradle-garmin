@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.chesapeaketechnology'
-version '0.2.0-SNAPSHOT'
+version '0.2.1-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
@@ -37,12 +37,6 @@ gradlePlugin {
             displayName = 'Gradle Garmin Barrel Plugin'
             description = 'Plugin which assists in building Garmin barrels on Gradle'
             implementationClass = 'com.chesapeaketechnology.gradle.plugins.garmin.GradleGarminBarrelPlugin'
-        }
-        garminPublishPlugin {
-            id = 'com.chesapeaketechnology.garmin-publish-plugin'
-            displayName = 'Garmin Publish Plugin'
-            description = 'Plugin which assists in publishing Garmin artifacts to Maven repos'
-            implementationClass = 'com.chesapeaketechnology.gradle.plugins.garmin.GarminPublishPlugin'
         }
     }
 }
