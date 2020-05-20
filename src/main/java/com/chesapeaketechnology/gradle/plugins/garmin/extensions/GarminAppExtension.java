@@ -6,13 +6,11 @@ import java.util.List;
 /**
  * Gradle extension for Garmin wearable applications.
  */
-public class GarminAppExtension extends GarminExtension
+public class GarminAppExtension extends GarminBuildExtension
 {
     private List<String> targetDevices;
 
     private boolean parallelBuild;
-
-    private String developerKey;
 
     public List<String> getTargetDevices()
     {
@@ -32,15 +30,5 @@ public class GarminAppExtension extends GarminExtension
     public void setParallelBuild(boolean parallelBuild)
     {
         this.parallelBuild = parallelBuild;
-    }
-
-    public String getDeveloperKey()
-    {
-        return developerKey;
-    }
-
-    public void setDeveloperKey(String developerKeyLocation)
-    {
-        developerKey = developerKeyLocation;
     }
 }
