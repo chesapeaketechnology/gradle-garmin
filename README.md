@@ -7,14 +7,14 @@ Gradle plugins to assist with Garmin wearable development
 **Apps**
 ```groovy
 plugins {
-  id "com.chesapeaketechnology.gradle-garmin-app" version "0.1.0"
+  id "com.chesapeaketechnology.gradle-garmin-app" version "0.2.1"
 }
 ```
 **Barrels**
 
 ```groovy
 plugins {
-  id "com.chesapeaketechnology.gradle-garmin-barrel" version "0.1.0"
+  id "com.chesapeaketechnology.gradle-garmin-barrel" version "0.2.1"
 }
 ```
 
@@ -28,7 +28,7 @@ buildscript {
     dependencies {
         classpath group: 'com.chesapeaketechnology',
                 name: 'gradle-garmin',
-                version: '0.1.0'
+                version: '0.2.1'
     }
 }
 ```
