@@ -8,7 +8,7 @@ import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.Project;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,14 +42,20 @@ public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppExtens
     @Override
     protected List<BaseGarminTask> createTasks(Project project, GarminAppExtension extension)
     {
+        List<BaseGarminTask> tasks = new ArrayList<>();
         BuildGarminAppTask buildTask = createBuildTask(project, extension);
-        TestGarminAppTask testTask = createTestTask(project, extension);
-        testTask.dependsOn(buildTask);
-        testTask.dependsOn(project.getTasks().getByPath(START_CONNECT_IQ_TASK));
-        testTask.getOutputs().upToDateWhen(task -> false);
+        if(extension.getTest() != null)
+        {
+            TestGarminAppTask testTask = createTestTask(project, extension);
+            testTask.dependsOn(buildTask);
+            testTask.dependsOn(project.getTasks().getByPath(START_CONNECT_IQ_TASK));
+            testTask.getOutputs().upToDateWhen(task -> false);
+            tasks.add(testTask);
+        }
 
         configurePublishing(project, buildTask);
-        return Collections.unmodifiableList(Arrays.asList(buildTask, testTask));
+        tasks.add(buildTask);
+        return Collections.unmodifiableList(tasks);
     }
 
     private GarminAppExtension createAppBuildExt(Project project)
