@@ -26,6 +26,11 @@ public class GradleGarminBarrelPlugin extends BaseGarminBuildPlugin<GarminBarrel
     public static final String BUILD_GARMIN_BARREL = "buildGarminBarrel";
     public static final String TEST_GARMIN_BARREL = "testGarminBarrel";
 
+    public GradleGarminBarrelPlugin()
+    {
+        super(BuildType.BARREL);
+    }
+
     @Override
     protected GarminBarrelExtension createExtension(Project project)
     {

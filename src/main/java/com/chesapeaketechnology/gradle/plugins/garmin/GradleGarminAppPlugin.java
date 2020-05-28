@@ -25,6 +25,11 @@ public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppExtens
     public static final String BUILD_GARMIN_APP = "buildGarminApp";
     public static final String TEST_GARMIN_APP = "testGarminApp";
 
+    public GradleGarminAppPlugin()
+    {
+        super(BuildType.APP);
+    }
+
     @Override
     public void apply(Project project)
     {
