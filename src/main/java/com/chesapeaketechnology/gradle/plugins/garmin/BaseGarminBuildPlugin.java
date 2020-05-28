@@ -22,6 +22,13 @@ abstract class BaseGarminBuildPlugin<E extends GarminBuildExtension> extends Bas
 {
     private static final String DEVELOPER_KEY_ENV = "GARMIN_DEV_KEY";
 
+    protected BuildType buildType;
+
+    public BaseGarminBuildPlugin(BuildType buildType)
+    {
+        this.buildType = buildType;
+    }
+
     @Override
     public void apply(Project project)
     {
@@ -84,7 +91,10 @@ abstract class BaseGarminBuildPlugin<E extends GarminBuildExtension> extends Bas
                                         mavenArtifact -> {
                                             mavenArtifact.builtBy(buildGarminTask);
                                             mavenArtifact.setExtension(getExtensionByStringHandling(file.getName()).orElse(""));
-                                            mavenArtifact.setClassifier(name);
+                                            if (buildType.equals(BuildType.APP))
+                                            {
+                                                mavenArtifact.setClassifier(name);
+                                            }
                                         }))
                                 .setArtifactId(buildGarminTask.getOutName());
                     });
@@ -104,5 +114,11 @@ abstract class BaseGarminBuildPlugin<E extends GarminBuildExtension> extends Bas
         return Optional.ofNullable(filename)
                 .filter(f -> f.contains("."))
                 .map(f -> f.substring(filename.lastIndexOf(".") + 1));
+    }
+
+    protected enum BuildType
+    {
+        APP,
+        BARREL
     }
 }

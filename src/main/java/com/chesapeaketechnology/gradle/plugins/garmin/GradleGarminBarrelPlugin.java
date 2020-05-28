@@ -8,7 +8,7 @@ import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.Project;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,12 +40,20 @@ public class GradleGarminBarrelPlugin extends BaseGarminBuildPlugin<GarminBarrel
     @Override
     protected List<BaseGarminTask> createTasks(Project project, GarminBarrelExtension extension)
     {
+        List<BaseGarminTask> tasks = new ArrayList<>();
         BuildGarminBarrelTask barrelBuildTask = (BuildGarminBarrelTask) createDefaultGarminBuildTask(project, extension, BUILD_GARMIN_BARREL,
                 BuildGarminBarrelTask.class);
-        TestGarminBarrelTask barrelTestTask = createTestTask(project, extension);
-        barrelTestTask.dependsOn(barrelBuildTask);
+
+        if(extension.getTest() != null)
+        {
+            TestGarminBarrelTask barrelTestTask = createTestTask(project, extension);
+            barrelTestTask.dependsOn(barrelBuildTask);
+            tasks.add(barrelTestTask);
+        }
+
         configurePublishing(project, barrelBuildTask);
-        return Collections.unmodifiableList(Arrays.asList(barrelBuildTask, barrelTestTask));
+        tasks.add(barrelBuildTask);
+        return Collections.unmodifiableList(tasks);
     }
 
     private TestGarminBarrelTask createTestTask(Project project, GarminBarrelExtension extension)
