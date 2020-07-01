@@ -41,7 +41,7 @@ public class GradleGarminBarrelPlugin extends BaseGarminBuildPlugin<GarminBarrel
     protected List<BaseGarminTask> createTasks(Project project, GarminBarrelExtension extension)
     {
         List<BaseGarminTask> tasks = new ArrayList<>();
-        BuildGarminBarrelTask barrelBuildTask = (BuildGarminBarrelTask) createDefaultGarminBuildTask(project, extension, BUILD_GARMIN_BARREL,
+        BuildGarminBarrelTask barrelBuildTask = (BuildGarminBarrelTask) createGarminBuildTask(project, extension, BUILD_GARMIN_BARREL,
                 BuildGarminBarrelTask.class);
 
         if(extension.getTest() != null)

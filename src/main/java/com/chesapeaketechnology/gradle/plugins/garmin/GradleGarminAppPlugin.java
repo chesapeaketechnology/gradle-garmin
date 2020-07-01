@@ -3,6 +3,7 @@ package com.chesapeaketechnology.gradle.plugins.garmin;
 import com.chesapeaketechnology.gradle.plugins.garmin.extensions.GarminAppExtension;
 import com.chesapeaketechnology.gradle.plugins.garmin.tasks.BaseGarminTask;
 import com.chesapeaketechnology.gradle.plugins.garmin.tasks.build.BuildGarminAppTask;
+import com.chesapeaketechnology.gradle.plugins.garmin.tasks.build.BuildGarminAppWithAssemblerOutputTask;
 import com.chesapeaketechnology.gradle.plugins.garmin.tasks.test.TestGarminAppTask;
 import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.Project;
@@ -23,6 +24,7 @@ public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppExtens
 {
     private static final String GARMIN_APP_EXT = "garminApp";
     public static final String BUILD_GARMIN_APP = "buildGarminApp";
+    public static final String BUILD_GARMIN_APP_WITH_ASSMBL_OUTPUT = "buildGarminAppWithAssmblyOut";
     public static final String TEST_GARMIN_APP = "testGarminApp";
 
     public GradleGarminAppPlugin()
@@ -74,7 +76,7 @@ public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppExtens
 
     private BuildGarminAppTask createBuildTask(Project proj, GarminAppExtension appExtension)
     {
-        BuildGarminAppTask defaultGarminTask = (BuildGarminAppTask) createDefaultGarminBuildTask(proj, appExtension,
+        BuildGarminAppTask defaultGarminTask = (BuildGarminAppTask) createGarminBuildTask(proj, appExtension,
                 BUILD_GARMIN_APP, BuildGarminAppTask.class);
         defaultGarminTask.setDevices(appExtension.getTargetDevices());
 
@@ -90,6 +92,26 @@ public class GradleGarminAppPlugin extends BaseGarminBuildPlugin<GarminAppExtens
 
         defaultGarminTask.setParallel(appExtension.isParallelBuild());
         return defaultGarminTask;
+    }
+
+    private BuildGarminAppWithAssemblerOutputTask createBuildAssmblOutTask(Project proj, GarminAppExtension appExtension)
+    {
+        BuildGarminAppWithAssemblerOutputTask garminTask = (BuildGarminAppWithAssemblerOutputTask) createGarminBuildTask(proj, appExtension,
+                BUILD_GARMIN_APP_WITH_ASSMBL_OUTPUT, BuildGarminAppWithAssemblerOutputTask.class);
+        garminTask.setDevices(appExtension.getTargetDevices());
+
+        if (appExtension.getDeveloperKey() != null)
+        {
+            garminTask.setDeveloperKey(new File(appExtension.getDeveloperKey()));
+        } else
+        {
+            throw new InvalidUserDataException("Developer key cannot be null! Please set the GARMIN_DEV_KEY " +
+                    "environment variable to the location of your Garmin developer key OR set 'developerKey' " +
+                    "in the garminApp config block.");
+        }
+
+        garminTask.setParallel(appExtension.isParallelBuild());
+        return garminTask;
     }
 
     private TestGarminAppTask createTestTask(Project project, GarminAppExtension extension)

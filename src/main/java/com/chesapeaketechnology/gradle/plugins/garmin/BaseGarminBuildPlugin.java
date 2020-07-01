@@ -50,8 +50,8 @@ abstract class BaseGarminBuildPlugin<E extends GarminBuildExtension> extends Bas
         return garminBuildExtension;
     }
 
-    protected BaseGarminBuildTask createDefaultGarminBuildTask(Project project, GarminBuildExtension extension, String taskName,
-                                                               Class<? extends BaseGarminBuildTask> taskClazz)
+    protected BaseGarminBuildTask createGarminBuildTask(Project project, GarminBuildExtension extension, String taskName,
+                                                        Class<? extends BaseGarminBuildTask> taskClazz)
     {
         BaseGarminBuildTask buildGarminTask = (BaseGarminBuildTask) super.createDefaultGarminTask(project, extension, taskName, taskClazz);
 
