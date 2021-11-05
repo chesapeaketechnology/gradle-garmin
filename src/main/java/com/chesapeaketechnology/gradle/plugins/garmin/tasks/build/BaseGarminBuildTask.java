@@ -2,9 +2,11 @@ package com.chesapeaketechnology.gradle.plugins.garmin.tasks.build;
 
 import com.chesapeaketechnology.gradle.plugins.garmin.tasks.BaseGarminTask;
 import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,8 +15,7 @@ import java.util.List;
 /**
  * Base abstract build task for apps and barrels
  */
-public abstract class BaseGarminBuildTask extends BaseGarminTask
-{
+public abstract class BaseGarminBuildTask extends BaseGarminTask {
     @OutputDirectory
     protected File outputDirectory;
 
@@ -23,6 +24,9 @@ public abstract class BaseGarminBuildTask extends BaseGarminTask
 
     @Input
     protected String outName;
+
+    @Optional
+    private String typeCheckLevel;
 
     @TaskAction
     void start()
@@ -67,6 +71,21 @@ public abstract class BaseGarminBuildTask extends BaseGarminTask
         args.add("-f");
         jungleFiles.forEach(file -> args.add(file.getPath()));
 
+        // Parameter set to string here because 0 is a valid value and an integer would default to it. A error/null
+        // indicates there should be no type checking applied.
+        try {
+            int checkLevel = Integer.parseInt(typeCheckLevel);
+            if (checkLevel >= 0 && checkLevel < 4) {
+                args.add("-l");
+                args.add(typeCheckLevel);
+            }
+        }
+        catch(Exception exception)
+        {
+            throw new IllegalArgumentException("Could not run type check on Garmin operation. Check that the SDK " +
+                    "version is 4.0 or later.", exception);
+        }
+
         args.add("--warn");
 
         return args;
@@ -110,5 +129,15 @@ public abstract class BaseGarminBuildTask extends BaseGarminTask
     public void setOutName(String outName)
     {
         this.outName = outName;
+    }
+
+    public String getTypeCheckLevel()
+    {
+        return typeCheckLevel;
+    }
+
+    public void setTypeCheckLevel(String typeCheckLevel)
+    {
+        this.typeCheckLevel = typeCheckLevel;
     }
 }

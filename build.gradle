@@ -6,7 +6,7 @@ plugins {
 
 group 'com.chesapeaketechnology'
 
-version '0.2.2'
+version '0.3.0'
 
 sourceCompatibility = 1.8
 
