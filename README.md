@@ -7,14 +7,14 @@ Gradle plugins to assist with Garmin wearable development
 **Apps**
 ```groovy
 plugins {
-  id "com.chesapeaketechnology.gradle-garmin-app" version "0.2.2"
+  id "com.chesapeaketechnology.gradle-garmin-app" version "0.3.0"
 }
 ```
 **Barrels**
 
 ```groovy
 plugins {
-  id "com.chesapeaketechnology.gradle-garmin-barrel" version "0.2.2"
+  id "com.chesapeaketechnology.gradle-garmin-barrel" version "0.3.0"
 }
 ```
 
@@ -28,7 +28,7 @@ buildscript {
     dependencies {
         classpath group: 'com.chesapeaketechnology',
                 name: 'gradle-garmin',
-                version: '0.2.2'
+                version: '0.3.0'
     }
 }
 ```
@@ -64,7 +64,16 @@ Both Apps and Barrels share some of the same configuration items.
 | `outputDirectory` | Directory for generated output     |    **No** | `<Java Build Directory>`
 | `jungleFiles` | Array of jungle files to compile with    |    **No** | `<Project Directory>/monkey.jungle`
 | `outName` | The generated file name(s)     |    **No** | `<Project Name>`
+| `typeCheckLevel` | Type checker level |    **No** | Disabled
 
+*TYPE CHECKER* - Beginning in the System level of 4.0, Garmin added Monkey Types to the language. The type checker 
+verifies the code passes the quick checks like a linting tool. By default, the checker is disabled but adding the 
+property and a level will enabled it at build time for apps and barrels. Further details can be found at
+https://developer.garmin.com/connect-iq/monkey-c/monkey-types/. The levels available are as follows:
+* **0** - ***Silent*** - No type checking; keep everything dynamically typed
+* **1** - ***Gradual*** - Type check any statement where typing can be inferred, otherwise stay silent 
+* **2** - ***Informative*** - Type check only what has been typed, warn about ambiguity
+* **3** - ***Strict*** - Do not allow compiler ambiguity
 
 #### Garmin Apps
 

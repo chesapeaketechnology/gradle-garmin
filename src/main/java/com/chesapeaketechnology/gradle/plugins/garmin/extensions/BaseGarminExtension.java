@@ -9,6 +9,8 @@ public class BaseGarminExtension
 
     private String appDirectory;
 
+    private String typeCheckLevel;
+
     public String getSdkDirectory()
     {
         return sdkDirectory;
@@ -27,5 +29,15 @@ public class BaseGarminExtension
     public void setAppDirectory(String appDirectory)
     {
         this.appDirectory = appDirectory;
+    }
+
+    public String getTypeCheckLevel()
+    {
+        return typeCheckLevel;
+    }
+
+    public void setTypeCheckLevel(String typeCheckLevel)
+    {
+        this.typeCheckLevel = typeCheckLevel;
     }
 }

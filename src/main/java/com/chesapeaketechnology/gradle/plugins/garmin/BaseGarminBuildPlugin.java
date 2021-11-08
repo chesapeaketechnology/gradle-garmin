@@ -64,6 +64,7 @@ abstract class BaseGarminBuildPlugin<E extends GarminBuildExtension> extends Bas
         buildGarminTask.setJungleFiles(extension.getJungleFiles().stream().map(File::new).collect(Collectors.toList()));
         buildGarminTask.setOutputDirectory(new File(extension.getOutputDirectory()));
         buildGarminTask.setAppName(extension.getAppName());
+        buildGarminTask.setTypeCheckLevel(extension.getTypeCheckLevel());
         return buildGarminTask;
     }
 
