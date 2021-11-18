@@ -4,7 +4,7 @@ plugins {
     id 'maven-publish'
 }
 
-group 'com.chesapeaketechnology'
+group 'us.ctic'
 
 version '0.3.0'
 
@@ -28,16 +28,16 @@ pluginBundle {
 gradlePlugin {
     plugins {
         garminGradleAppPlugin {
-            id = 'com.chesapeaketechnology.gradle-garmin-app'
+            id = 'us.ctic.gradle-garmin-app'
             displayName = 'Gradle Garmin App Plugin'
             description = 'Plugin which assists in building Garmin apps on Gradle'
-            implementationClass = 'com.chesapeaketechnology.gradle.plugins.garmin.GradleGarminAppPlugin'
+            implementationClass = 'us.ctic.gradle.plugins.garmin.GradleGarminAppPlugin'
         }
         garminGradleBarrelPlugin {
-            id = 'com.chesapeaketechnology.gradle-garmin-barrel'
+            id = 'us.ctic.gradle-garmin-barrel'
             displayName = 'Gradle Garmin Barrel Plugin'
             description = 'Plugin which assists in building Garmin barrels on Gradle'
-            implementationClass = 'com.chesapeaketechnology.gradle.plugins.garmin.GradleGarminBarrelPlugin'
+            implementationClass = 'us.ctic.gradle.plugins.garmin.GradleGarminBarrelPlugin'
         }
     }
 }

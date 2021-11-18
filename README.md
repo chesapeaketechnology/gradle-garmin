@@ -7,14 +7,14 @@ Gradle plugins to assist with Garmin wearable development
 **Apps**
 ```groovy
 plugins {
-  id "com.chesapeaketechnology.gradle-garmin-app" version "0.3.0"
+  id "us.ctic.gradle-garmin-app" version "0.3.0"
 }
 ```
 **Barrels**
 
 ```groovy
 plugins {
-  id "com.chesapeaketechnology.gradle-garmin-barrel" version "0.3.0"
+  id "us.ctic.gradle-garmin-barrel" version "0.3.0"
 }
 ```
 
@@ -26,7 +26,7 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath group: 'com.chesapeaketechnology',
+        classpath group: 'us.ctic',
                 name: 'gradle-garmin',
                 version: '0.3.0'
     }
@@ -35,12 +35,12 @@ buildscript {
 
 **Apps**
 ```groovy
-apply plugin: 'com.chesapeaketechnology.gradle-garmin-app'
+apply plugin: 'us.ctic.gradle-garmin-app'
 ```
 
 **Barrels**
 ```groovy
-apply plugin: 'com.chesapeaketechnology.gradle-garmin-barrel' 
+apply plugin: 'us.ctic.gradle-garmin-barrel' 
 ```
 
 ## Sample Usage
@@ -89,8 +89,8 @@ the following configuration options are available:
 Example:
 ```groovy
 garminApp {
-    developerKey = "/Users/JCampbell8/keys/developer_key" //not needed if GARMIN_DEV_KEY is set
-    sdkDirectory = "/Users/JCampbell8/SDKs/connectiq-sdk-mac-3.1.7-2020-01-23-a3869d977" //not needed if GARMIN_SDK_HOME is set
+    developerKey = "<path-to-key>" //not needed if GARMIN_DEV_KEY is set
+    sdkDirectory = "<path-to-sdk>" //not needed if GARMIN_SDK_HOME is set
     targetDevices = ["fenix5plus", "fenix6pro"]
 }
 ```
@@ -103,7 +103,7 @@ Example:
 ```groovy
 garminBarrel {
     outName = "MySpecialBarrel"
-    sdkDirectory = "/Users/JCampbell8/SDKs/connectiq-sdk-mac-3.1.7-2020-01-23-a3869d977" //not needed if GARMIN_SDK_HOME is set
+    sdkDirectory = "<path-to-sdk>" //not needed if GARMIN_SDK_HOME is set
 }
 ```
 
